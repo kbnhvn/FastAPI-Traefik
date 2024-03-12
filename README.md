@@ -23,9 +23,9 @@ Remarques:
   - Si la branche n'existe pas, il est possible de la créer via ce même menu
   - Eviter de travailler à plusieur sur la même branche pour éviter les conflits
 
-Vérifier sur quelle branche on se trouve: ```git status```
-Récupérer les branches: ```git fetch```
-Changer de branche: ```git checkout```
+- Vérifier sur quelle branche on se trouve: ```git status```
+- Récupérer les branches: ```git fetch```
+- Changer de branche: ```git checkout```
 
 (Voir le module complémentaire Git/Github, notebook 3 : Github - First steps pour les principales commandes git)
 
