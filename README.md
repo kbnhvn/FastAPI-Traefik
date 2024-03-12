@@ -18,6 +18,7 @@ Les différentes tâches et leur avancement sont visibles sur Jira : https://dst
 Pour afficher le nom de la branche liée à une tâche :
   - Cliquer sur la carte d'une tâche
   - Passer la souris sur ```1 branche``` sur le panneau de droite, le nom de la branche s'affiche
+
 Remarques: 
   - Si la branche n'existe pas, il est possible de la créer via ce même menu
   - Eviter de travailler à plusieur sur la même branche pour éviter les conflits
