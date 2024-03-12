@@ -6,10 +6,9 @@ import asyncio
 
 # Configuration Elasticsearch
 es = AsyncElasticsearch(
-    hosts=[os.getenv('DATABASE_URL') ],
-    http_auth=(os.getenv('DATABASE_USER'), os.getenv('DATABASE_PASSWORD')),
-    use_ssl=True,
-    verify_certs=True
+    hosts=[os.getenv('DATABASE_URL')],
+    use_ssl=False,
+    verify_certs=False 
 )
 
 # ----- Fonctions de validation/transformation/préparation des données ----- #
@@ -47,12 +46,24 @@ def prepare_for_elasticsearch(validated_results):
         
     return validated_results
 
+# --------- Attente du lancement de ES----------
+async def wait_for_elasticsearch(es_client):
+    while True:
+        try:
+            if await es_client.ping():
+                print("Elasticsearch est prêt.")
+                break
+        except Exception as e:
+            print(f"En attente d'Elasticsearch: {e}")
+        await asyncio.sleep(10)
+# ----------------------------------------------
 
 # Récupération des données => Sera lancée via un cronjob kubernetes
 async def fetch_data_and_index():
+    await wait_for_elasticsearch(es)
     try:
         async with httpx.AsyncClient() as client:
-            response = await client.get("https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/qualite-de-lair-france")
+            response = await client.get("https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/qualite-de-lair-france/records?limit=-1")
             if response.status_code == 200:
                 data = response.json()
             else:
@@ -69,7 +80,7 @@ async def fetch_data_and_index():
     # Indexage des données dans Elasticsearch
     try:
         for document in documents_to_index:
-            await es.index(index="qualite_air", document=document)
+            await es.index(index="qualite_air", body=document)
     except Exception as e:
         print(f"Erreur lors de l'indexation dans Elasticsearch : {e}")
 
