@@ -9,7 +9,7 @@ https://1drv.ms/w/s!ArK3W0SU4bw29gz5Em1yGjNG07H8?e=N2dZ83
 ### Pour commencer :
 - Créer un dossier projet
 - Cloner le repo dans ce dossier :
-  ```https://github.com/kbnhvn/FastAPI-Traefik.git```
+  ```https://github.com/kbnhvn/FastAPI-Traefik.git .```
 
 ### Répartition du travail :
 Les différentes tâches et leur avancement sont visibles sur Jira : https://dst-fastapi-traefik.atlassian.net/jira/software/projects/KAN/boards/1
