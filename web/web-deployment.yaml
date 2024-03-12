@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+spec:
+  replicas: 1 # Mettez le nombre de répliques souhaité
+  selector:
+    matchLabels:
+      app: fastapi-traefik
+  template:
+    metadata:
+      labels:
+        app: fastapi-traefik
+    spec:
+      containers:
+        - name: web
+          image: <IMAGE_NAME> # Remplacez <IMAGE_NAME> par le nom de votre image
+          command: ["bash", "-c"]
+          args:
+            - "while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0"
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik"
