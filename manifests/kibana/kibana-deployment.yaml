@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: kibana
 spec:
-  serviceName: kibana-service
   selector:
     matchLabels:
       app: kibana
@@ -16,8 +15,8 @@ spec:
       containers:
       - name: kibana
         image: docker.elastic.co/kibana/kibana:7.5.2
-        envFrom:
-          - configMapRef:
-              name: kibana-configmap
+        env:
+          - name: ELASTICSEARCH_HOSTS
+            value: http://elasticsearch-service.standard.svc.cluster.local:9200
         ports:
         - containerPort: 5601
