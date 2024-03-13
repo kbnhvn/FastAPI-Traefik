@@ -1,17 +1,21 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: datafetcher-cronjob
 spec:
-  schedule: "0 0 */2 * *" # Un jour sur deux à minuit
+  schedule: "45 17 * * *" # Un jour sur deux à minuit
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: datafetcher
-            image: kbnhvn/datafetcher:latest
-            envFrom:
-              - configMapRef:
-                name: data-air-config
+            image: kbnhvn/datafetcher:v.0.0.1
+            env:
+            - name: DATABASE_URL
+              value: elasticsearch-service.standard.svc.cluster.local
+            - name: INDEX_NAME
+              value: qualite_air
+            - name: EXTERNAL_API_URL
+              value: https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/qualite-de-lair-france/records?limit=-1
           restartPolicy: OnFailure
