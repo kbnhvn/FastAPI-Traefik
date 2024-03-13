@@ -5,4 +5,4 @@
 - kbnhvn/web-prod : https://hub.docker.com/r/kbnhvn/web-prod
 
 Env :
-DATABASE_URL=postgresql://<user>:<password>@<host>:5432/<db>
+DATABASE_URL=postgresql://```user```:```password```@```host```:5432/```db```
