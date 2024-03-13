@@ -22,4 +22,9 @@ spec:
             - containerPort: 8000  # Port exposé par le conteneur
           env:
             - name: DATABASE_URL  # Variable d'environnement pour l'URL de la base de données
-              value: "postgresql://user:password@host:5432/db"  # Valeur de l'URL de la base de données
+              value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db-service.namespace.svc.cluster.local:5432/$(POSTGRES_DB)"  # Valeur de l'URL de la base de données
+          envFrom:
+            - secretRef:
+                name: db-secret  # Référence au Secret contenant les informations d'identification
+            - configMapRef:
+                name: db-configmap  # Référence au ConfigMap contenant les paramètres de configuration
