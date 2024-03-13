@@ -1,4 +1,9 @@
 # FastAPI-Traefik
 
-## Cahier des charges :
-https://1drv.ms/w/s!ArK3W0SU4bw29gz5Em1yGjNG07H8?e=N2dZ83
+### Images créées à partir du projet initial :
+- kbnhvn/web-dev : https://hub.docker.com/r/kbnhvn/web-dev
+- kbnhvn/web-prod : https://hub.docker.com/r/kbnhvn/web-prod
+
+Env :
+DATABASE_URL=postgresql://```user```:```password```@```host```:5432/```db```
+
