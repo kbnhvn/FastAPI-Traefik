@@ -20,17 +20,19 @@ services:
       - SERVER_NAME=localhost
       - ELASTICSEARCH_URL=http://elasticsearch:9200
     ports:
-      - 5601:5601
+      - 80:5601
     networks:
       - elastic
     depends_on:
       - elasticsearch
 
   datafetcher:
-    image: datafetcher:latest
+    image: kbnhvn/datafetcher:latest
     container_name: datafetcher
     environment:
       DATABASE_URL: "http://elasticsearch:9200"
+      INDEX_NAME: "qualite_air"
+      EXTERNAL_API_URL: "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/qualite-de-lair-france/records?limit=-1"
     networks:
       - elastic
     depends_on:

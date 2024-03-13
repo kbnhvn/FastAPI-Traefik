@@ -63,7 +63,7 @@ async def fetch_data_and_index():
     await wait_for_elasticsearch(es)
     try:
         async with httpx.AsyncClient() as client:
-            response = await client.get("https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/qualite-de-lair-france/records?limit=-1")
+            response = await client.get(os.getenv('EXTERNAL_API_URL'))
             if response.status_code == 200:
                 data = response.json()
             else:
@@ -80,10 +80,17 @@ async def fetch_data_and_index():
     # Indexage des données dans Elasticsearch
     try:
         for document in documents_to_index:
-            await es.index(index="qualite_air", body=document)
+            await es.index(index=os.getenv('INDEX_NAME'), body=document)
     except Exception as e:
         print(f"Erreur lors de l'indexation dans Elasticsearch : {e}")
 
 # Pour lancer le script 
+async def main():
+    try:
+        await fetch_data_and_index()
+    finally:
+        # Fermeture de la connexion
+        await es.close()
+
 if __name__ == "__main__":
-    asyncio.run(fetch_data_and_index())
+    asyncio.run(main())
