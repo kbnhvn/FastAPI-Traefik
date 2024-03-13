@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: data-air-config
 data:
-  DATABASE_URL: "http://elasticsearch:9200"
+  DATABASE_URL: "elasticsearch-service.standard.svc.cluster.local"
   INDEX_NAME: "qualite_air"
   EXTERNAL_API_URL: "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/qualite-de-lair-france/records?limit=-1"
