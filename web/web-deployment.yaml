@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-deployment
+  name: web-deployment  # Nom du déploiement
 spec:
-  replicas: 1 # Mettez le nombre de répliques souhaité
+  replicas: 1  # Nombre de répliques
   selector:
     matchLabels:
-      app: fastapi-traefik
+      app: fastapi-traefik  # Sélectionne les pods avec ce label
   template:
     metadata:
       labels:
-        app: fastapi-traefik
+        app: fastapi-traefik  # Label pour les pods
     spec:
       containers:
         - name: web
-          image: <IMAGE_NAME> # Remplacez <IMAGE_NAME> par le nom de votre image
-          command: ["bash", "-c"]
+          image: kbnhvn/web-dev:v0.0.1  # Image Docker à utiliser
+          command: ["bash", "-c"]  # Commande à exécuter dans le conteneur
           args:
-            - "while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0"
+            - "while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0"  # Commande à exécuter
           ports:
-            - containerPort: 8000
+            - containerPort: 8000  # Port exposé par le conteneur
           env:
-            - name: DATABASE_URL
-              value: "postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik"
+            - name: DATABASE_URL  # Variable d'environnement pour l'URL de la base de données
+              value: "postgresql://user:password@host:5432/db"  # Valeur de l'URL de la base de données
