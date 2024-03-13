@@ -1,0 +1,17 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: datafetcher-cronjob
+spec:
+  schedule: "0 0 */2 * *" # Un jour sur deux à minuit
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: datafetcher
+            image: kbnhvn/datafetcher:latest
+            envFrom:
+              - configMapRef:
+                name: data-air-config
+          restartPolicy: OnFailure
