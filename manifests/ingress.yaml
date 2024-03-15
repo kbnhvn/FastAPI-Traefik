@@ -2,7 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: app-ingress
-  namespace: standard
 spec:
   ingressClassName: traefik
   # tls:
@@ -15,7 +14,7 @@ spec:
       paths:
         # Path api web
         - path: /
-          pathType: Prefix
+          pathType: Exact
           backend:
              service:
               name: web-service
@@ -28,7 +27,7 @@ spec:
              service:
               name: pgadmin-service
               port:
-                number: 80
+                number: 8080
         # Path kibana
         - path: /api/kibana
           pathType: Prefix
