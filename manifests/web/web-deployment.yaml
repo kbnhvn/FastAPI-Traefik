@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: kbnhvn/web-dev:v0.0.1  # Image Docker à utiliser
+          image: kbnhvn/web-dev:v.0.0.1  # Image Docker à utiliser
           command: ["bash", "-c"]  # Commande à exécuter dans le conteneur
           args:
             - "while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0"  # Commande à exécuter
