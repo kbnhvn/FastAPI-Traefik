@@ -15,6 +15,10 @@ spec:
       containers:
       - name: pgadmin
         image: dpage/pgadmin4
+        env:
+        # Permet de gérer la route depuis l'ingress
+        - name: SCRIPT_NAME
+          value: /api/admin
         envFrom:
           - secretRef:
               name: pgadmin-secret

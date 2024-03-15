@@ -26,3 +26,5 @@ kubectl apply -f ./pgAdmin/pgadmin-service.yaml -n standard
 kubectl apply -f ./pgAdmin/pgadmin-deployment.yaml -n standard
 
 kubectl apply -f ./ingress.yaml -n standard
+
+kubectl get all -n standard
