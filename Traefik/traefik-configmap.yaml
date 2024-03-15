@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-configmap
+data:
+  traefik.toml: |
+    # listen on port 80
+    [entryPoints]
+      [entryPoints.web]
+        address = ":80"
+    
+    # Traefik dashboard over http
+    [api]
+    insecure = true
+    
+    [log]
+    level = "DEBUG"
+    
+    [accessLog]
+    
+    # containers are not discovered automatically 
+    [providers]
+      [providers.kubernetesCRD]
+        exposedByDefault = false
