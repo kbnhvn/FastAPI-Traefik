@@ -20,7 +20,7 @@ Pour afficher le nom de la branche liée à une tâche :
   - Passer la souris sur ```1 branche``` sur le panneau de droite, le nom de la branche s'affiche
 
 Remarques: 
-  - Si la branche n'existe pas, il est possible de la créer via ce même menu
+  - Si la branche n'existe pas, il est possible de la créer via ce même menu (et choisir : Branch from : develop )
   - Eviter de travailler à plusieur sur la même branche pour éviter les conflits
 
 - Vérifier sur quelle branche on se trouve: ```git status```
