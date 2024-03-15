@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment  # Nom du déploiement
+spec:
+  replicas: {{ .Values.web.replicaCount }}  # Nombre de répliques
+  selector:
+    matchLabels:
+      app: fastapi-traefik  # Sélectionne les pods avec ce label
+  template:
+    metadata:
+      labels:
+        app: fastapi-traefik  # Label pour les pods
+    spec:
+      containers:
+        - name: web
+          image: {{ .Values.web.repository }}:{{ .Values.web.tag }}  # Image Docker à utiliser
+          command: ["bash", "-c"]  # Commande à exécuter dans le conteneur
+          args:
+            - "uvicorn app.main:app --host 0.0.0.0"  # Commande à exécuter
+          ports:
+            - containerPort: 8000  # Port exposé par le conteneur
+          env:
+            - name: DATABASE_URL  # Variable d'environnement pour l'URL de la base de données
+              value: "postgresql://{{ .Values.db.credentials.user }}:{{ .Values.db.credentials.password }}@db-service.{{ .Values.namespace }}.svc.cluster.local:5432/{{ .Values.db.config.db_name }}"  # Valeur de l'URL de la base de données

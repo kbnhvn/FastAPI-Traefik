@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: elasticsearch
+spec:
+  serviceName: elasticsearch-service
+  selector:
+    matchLabels:
+      app: elasticsearch
+  replicas: {{ .Values.elasticsearch.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      containers:
+      - name: elasticsearch
+        image: {{ .Values.elasticsearch.repository }}:{{ .Values.elasticsearch.tag }}
+        envFrom:
+          - configMapRef:
+              name: elasticsearch-configmap
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: elasticsearch-data
+        ports:
+        - containerPort: 9200
+      volumes:
+      - name: elasticsearch-data
+        persistentVolumeClaim:
+          claimName: elasticsearch-pvc
