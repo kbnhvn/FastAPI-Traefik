@@ -19,7 +19,7 @@ spec:
         image: "{{ .Values.db.repository }}:{{ .Values.db.tag }}"  # Image Docker utilisée pour les conteneurs
         envFrom:
           - secretRef:
-              name: db-secret   # Référence au Secret contenant les informations d'identification de la base de données
+              name: "{{ .Values.db.credentials.secret_file }}"   # Référence au Secret contenant les informations d'identification de la base de données
           - configMapRef:
               name: db-configmap  # Référence au ConfigMap contenant les configurations de la base de données
         ports:

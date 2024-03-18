@@ -31,8 +31,7 @@ db:
   config: 
     db_name: fastapi_traefik
   credentials:
-    user: ZmFzdGFwaV90cmFlZmlr
-    password: ZmFzdGFwaV90cmFlZmlr
+    secret_file: db-secret
 
 pgadmin:
   replicaCount: 1
@@ -43,8 +42,8 @@ pgadmin:
   config: 
     script_name: /api/admin
   credentials:
-    email: YWRtaW5AYWRtaW4uY29t
-    password: cm9vdA==
+    secret_file: pgadmin-secret
+
 
 
 kibana:

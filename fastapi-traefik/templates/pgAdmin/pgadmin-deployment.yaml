@@ -21,6 +21,6 @@ spec:
           value: {{ .Values.pgadmin.config.script_name }}
         envFrom:
           - secretRef:
-              name: pgadmin-secret
+              name: "{{ .Values.pgadmin.credentials.secret_file }}"
         ports:
         - containerPort: 80
