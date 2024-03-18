@@ -9,7 +9,7 @@ spec:
   #     hosts:
   #       - 
   rules:
-  - host: fastapi-traefik.cours-datascientest-devops.cloudns.be
+  - host: "{{ .Values.ingress.host }}"
     http:
       paths:
         # Path api web
@@ -21,7 +21,7 @@ spec:
               port:
                 number: 8000
         # Path pgAdmin
-        - path: /api/admin
+        - path: "{{ .Values.pgadmin.config.script_name }}"
           pathType: Prefix
           backend:
              service:
@@ -29,7 +29,7 @@ spec:
               port:
                 number: 8080
         # Path kibana
-        - path: /api/kibana
+        - path: "{{ .Values.kibana.config.server_basepath }}"
           pathType: Prefix
           backend:
              service:

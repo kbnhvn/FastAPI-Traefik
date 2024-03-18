@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: elasticsearch-pvc                       
+spec:
+  accessModes:
+    - ReadWriteOnce                    # Mode d'accès au volume persistant
+  storageClassName: local-path         # Classe de stockage utilisée (à voir si modification requise)
+  resources:
+    requests:
+      storage: {{ .Values.elasticsearch.storage.capacity }}                    # Capacité de stockage demandée pour le volume

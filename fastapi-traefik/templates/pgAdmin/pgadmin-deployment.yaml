@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: pgadmin
-  replicas: 1
+  replicas: {{ .Values.pgadmin.replicaCount }}
   template:
     metadata:
       labels:
@@ -14,13 +14,13 @@ spec:
     spec:
       containers:
       - name: pgadmin
-        image: dpage/pgadmin4
+        image: {{ .Values.pgadmin.repository }}
         env:
         # Permet de gérer la route depuis l'ingress
         - name: SCRIPT_NAME
-          value: /api/admin
+          value: {{ .Values.pgadmin.config.script_name }}
         envFrom:
           - secretRef:
-              name: pgadmin-secret
+              name: "{{ .Values.pgadmin.credentials.secret_file }}"
         ports:
         - containerPort: 80

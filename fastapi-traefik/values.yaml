@@ -1,0 +1,75 @@
+# Default values for fastapi-traefik.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+namespace: ""
+
+data:
+  schedule: "45 17 * * *" # A définir
+  repository: kbnhvn/datafetcher
+  tag: v.0.0.1
+  index_name: qualite_air
+  external_api_url: https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/qualite-de-lair-france/records?limit=-1
+
+web:
+  replicaCount: 1
+  repository: kbnhvn/web-dev
+  tag: v.0.0.1
+  service:
+    type: ClusterIP
+    port: 8000
+  config: 
+    script_name: /api/admin
+
+db:
+  replicaCount: 1
+  repository: postgres
+  tag: 15-alpine
+  service:
+    type: ClusterIP
+  storage:
+    capacity: 10Gi 
+  config: 
+    db_name: fastapi_traefik
+  credentials:
+    secret_file: db-secret
+
+pgadmin:
+  replicaCount: 1
+  repository: dpage/pgadmin4
+  tag: 
+  service:
+    type: ClusterIP
+    port: 8080
+  config: 
+    script_name: /api/admin
+  credentials:
+    secret_file: pgadmin-secret
+
+kibana:
+  replicaCount: 1
+  repository: docker.elastic.co/kibana/kibana
+  tag: 7.5.2
+  service:
+    type: ClusterIP
+    port: 5601
+  config:
+    server_basepath: "/api/kibana"
+
+elasticsearch:
+  replicaCount: 1
+  repository: docker.elastic.co/elasticsearch/elasticsearch
+  tag: 7.5.2
+  service:
+    type: ClusterIP
+  storage:
+    capacity: 10Gi 
+  config:
+    node_name: "es"
+    discovery_type: "single-node"
+
+traefik:
+
+
+ingress:
+  host: fastapi-traefik.cours-datascientest-devops.cloudns.be
