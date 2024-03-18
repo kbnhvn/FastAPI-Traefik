@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: traefik-deployment
+
 spec:
   replicas: 1
   selector:
@@ -12,15 +13,15 @@ spec:
       labels:
         app: traefik
     spec:
+      serviceAccountName: traefik-service-account
       containers:
       - name: traefik
         image: traefik:v2.9.6
+        args:
+            - --api.insecure
+            - --providers.kubernetesingress
         ports:
-        - containerPort: 80
-        volumeMounts:
-        - name: traefik-config-volume
-          mountPath: /etc/traefik
-      volumes:
-      - name: traefik-config-volume
-        configMap:
-          name: traefik-configmap
+            - name: web
+              containerPort: 80
+            - name: dashboard
+              containerPort: 8080
