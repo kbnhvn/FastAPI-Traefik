@@ -8,5 +8,5 @@ spec:
     app: fastapi-traefik
   ports:
     - protocol: TCP
-      port: 8000
+      port: "{{ .Values.web.service.port }}"
       targetPort: 8000

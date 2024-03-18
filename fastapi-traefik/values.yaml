@@ -17,6 +17,7 @@ web:
   tag: v.0.0.1
   service:
     type: ClusterIP
+    port: 8000
   config: 
     script_name: /api/admin
 
@@ -39,12 +40,11 @@ pgadmin:
   tag: 
   service:
     type: ClusterIP
+    port: 8080
   config: 
     script_name: /api/admin
   credentials:
     secret_file: pgadmin-secret
-
-
 
 kibana:
   replicaCount: 1
@@ -52,6 +52,7 @@ kibana:
   tag: 7.5.2
   service:
     type: ClusterIP
+    port: 5601
   config:
     server_basepath: "/api/kibana"
 
