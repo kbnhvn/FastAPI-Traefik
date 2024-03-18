@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-configmap
+data:
+  node.name:  {{ .Values.elasticsearch.config.node_name }} 
+  discovery.type: {{ .Values.elasticsearch.config.discovery_type }}

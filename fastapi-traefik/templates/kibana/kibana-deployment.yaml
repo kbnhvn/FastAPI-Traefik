@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: kibana
-  replicas: 1
+  replicas: {{ .Values.kibana.replicaCount }}
   template:
     metadata:
       labels:
@@ -14,13 +14,13 @@ spec:
     spec:
       containers:
       - name: kibana
-        image: docker.elastic.co/kibana/kibana:7.5.2
+        image: {{ .Values.kibana.repository }}:{{ .Values.kibana.tag }}
         env:
           - name: ELASTICSEARCH_HOSTS
-            value: http://elasticsearch-service.standard.svc.cluster.local:9200
+            value: "http://elasticsearch-service.{{ .Values.namespace }}.svc.cluster.local:9200"
           # Ces ENV permettent de gérer le path d'accès à Kibana (via l'ingress)
           - name: SERVER_BASEPATH
-            value: "/api/kibana"
+            value: "{{ .Values.kibana.config.server_basepath }}"
           - name: SERVER_REWRITEBASEPATH
             value: "true"
         ports:

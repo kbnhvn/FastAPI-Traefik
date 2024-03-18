@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: web-deployment  # Nom du déploiement
 spec:
-  replicas: 1  # Nombre de répliques
+  replicas: {{ .Values.web.replicaCount }}  # Nombre de répliques
   selector:
     matchLabels:
       app: fastapi-traefik  # Sélectionne les pods avec ce label
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: kbnhvn/web-dev:v.0.0.1  # Image Docker à utiliser
+          image: {{ .Values.web.repository }}:{{ .Values.web.tag }}  # Image Docker à utiliser
           command: ["bash", "-c"]  # Commande à exécuter dans le conteneur
           args:
             - "uvicorn app.main:app --host 0.0.0.0"  # Commande à exécuter
@@ -22,9 +22,4 @@ spec:
             - containerPort: 8000  # Port exposé par le conteneur
           env:
             - name: DATABASE_URL  # Variable d'environnement pour l'URL de la base de données
-              value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db-service.standard.svc.cluster.local:5432/$(POSTGRES_DB)"  # Valeur de l'URL de la base de données
-          envFrom:
-            - secretRef:
-                name: db-secret  # Référence au Secret contenant les informations d'identification
-            - configMapRef:
-                name: db-configmap  # Référence au ConfigMap contenant les paramètres de configuration
+              value: "postgresql://{{ .Values.db.credentials.user }}:{{ .Values.db.credentials.password }}@db-service.{{ .Values.namespace }}.svc.cluster.local:5432/{{ .Values.db.config.db_name }}"  # Valeur de l'URL de la base de données
