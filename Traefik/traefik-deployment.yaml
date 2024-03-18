@@ -18,6 +18,7 @@ spec:
       - name: traefik
         image: traefik:v2.9.6
         args:
+            - --log.level=DEBUG
             - --api.insecure
             - --providers.kubernetesingress
         ports:
