@@ -116,5 +116,8 @@ role:
       verbs:
         - update
 
+serviceAccount:
+  name: traefik-service-account
+
 ingress:
   host: fastapi-traefik.cours-datascientest-devops.cloudns.be
