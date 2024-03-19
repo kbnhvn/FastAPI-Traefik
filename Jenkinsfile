@@ -5,6 +5,8 @@ DOCKER_IMAGE_DATA = "datafetcher"
 DOCKER_IMAGE_WEB_DEV = "web-dev"
 DOCKER_IMAGE_WEB_PROD = "web-prod"
 EXTERNAL_API_URL = "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/qualite-de-lair-france/records?limit=-1"
+DEV_HOSTNAME = "dev.fastapi-traefik.cloudns.ch"
+PROD_HOSTNAME = "prod.fastapi-traefik.cloudns.ch"
 DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
 }
 agent any // Jenkins will be able to select all available agents
@@ -235,6 +237,9 @@ stage('Deploiement en dev'){
                 sed -i "s+web.repository.*+repository: ${DOCKER_ID}/${DOCKER_IMAGE_WEB_DEV}+g" values.yml
                 sed -i "s+web.tag.*+tag: ${DOCKER_TAG}+g" values.yml
 
+                # Modification du ingress host
+                sed -i "s+ingress.host.*+host: ${DEV_HOSTNAME}+g" values.yml
+
                 helm upgrade --install app fastapi-traefik --values=values.yml --namespace $NAMESPACE
                 '''
                 }
@@ -279,6 +284,9 @@ stage('Deploiement en prod'){
                 # Modification des valeurs pour l'image web
                 sed -i "s+web.repository.*+repository: ${DOCKER_ID}/${DOCKER_IMAGE_WEB_PROD}+g" values.yml
                 sed -i "s+web.tag.*+tag: ${DOCKER_TAG}+g" values.yml
+
+                # Modification du ingress host
+                sed -i "s+ingress.host.*+host: ${PROD_HOSTNAME}+g" values.yml
 
                 helm upgrade --install app fastapi-traefik --values=values.yml --namespace $NAMESPACE
                 '''
