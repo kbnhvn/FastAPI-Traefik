@@ -17,12 +17,8 @@ spec:
       containers:
       - name: traefik
         image: {{ .Values.traefik.repository }}:{{ .Values.traefik.tag }}
-        args:
-            - --log.level=DEBUG
-            - --api.insecure
-            - --providers.kubernetesingress
-        ports:
-            - name: web
-              containerPort: 80
-            - name: dashboard
-              containerPort: 8080
+        args: {{ .Values.containerArgs }}
+        ports: 
+        {{ .Values.containerPorts }}
+        - name: {{ .name }}
+          containerPort: {{ .port }}
