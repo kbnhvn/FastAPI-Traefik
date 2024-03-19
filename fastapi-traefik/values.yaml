@@ -72,7 +72,6 @@ traefik:
   replicaCount: 1
   repository: traefik/traefik
 image:
-  repository: traefik
   tag: 2.5.1
   service:
     type: LoadBalancer
