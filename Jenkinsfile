@@ -203,8 +203,9 @@ stages {
     }
 
 stage('Deploiement en dev'){
-        when {
-            branch 'develop' // Cette condition s'assure que le stage ne s'exécute que sur la branche master
+        when 
+        {
+        branch 'develop' // Cette condition s'assure que le stage ne s'exécute que sur la branche develop
         }
         environment
         {
@@ -241,8 +242,9 @@ stage('Deploiement en dev'){
 
         }
 stage('Deploiement en prod'){
-        when {
-            branch 'master' // Cette condition s'assure que le stage ne s'exécute que sur la branche master
+        when 
+        {
+        branch 'master' // Cette condition s'assure que le stage ne s'exécute que sur la branche master
         }
         environment
         {
