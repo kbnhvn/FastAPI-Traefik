@@ -1,9 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: traefik
-  labels:
-    app: traefik
+  name: traefik-deployment
+
 spec:
   replicas: {{ .Values.traefik.replicaCount }}
   selector:
@@ -14,16 +13,16 @@ spec:
       labels:
         app: traefik
     spec:
+      serviceAccountName: traefik-service-account
       containers:
       - name: traefik
-        image: {{ .Values.traefik.repository }}
-        ports:
-        - name: http
-          containerPort: 80
-        - name: https
-          containerPort: 443
+        image: traefik:v2.9.6
         args:
-        - "--api.dashboard=true"
-        - "--providers.kubernetescrd"
-        - "--entrypoints.web.address=:80"
-        - "--entrypoints.websecure.address=:443"
+            - --log.level=DEBUG
+            - --api.insecure
+            - --providers.kubernetesingress
+        ports:
+            - name: web
+              containerPort: 80
+            - name: dashboard
+              containerPort: 8080
