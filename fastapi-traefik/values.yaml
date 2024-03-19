@@ -119,5 +119,10 @@ role:
 serviceAccount:
   name: traefik-service-account
 
+roleBinding:
+  name: traefik-role-binding
+  apiGroup: rbac.authorization.k8s.io
+
+
 ingress:
   host: fastapi-traefik.cours-datascientest-devops.cloudns.be
