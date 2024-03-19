@@ -15,9 +15,13 @@ web:
   replicaCount: 1
   repository: kbnhvn/web-dev
   tag: v.0.0.1
+  command: ["bash", "-c"]
+  arg: "uvicorn app.main:app --host 0.0.0.0"
+  containerPort: 8000
   service:
     type: ClusterIP
     port: 8000
+    targetPort: 8000
   config: 
     script_name: /api/admin
 
