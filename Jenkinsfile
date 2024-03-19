@@ -288,6 +288,13 @@ stage('Deploiement en prod'){
                 # Modification du ingress host
                 sed -i "s+ingress.host.*+host: ${PROD_HOSTNAME}+g" values.yml
 
+                # ------ Modifications relatives aux ENV de l'image PROD uniquement ----
+                sed -i '/web.command/d' values.yml
+                sed -i '/web.arg/d' values.yml
+                sed -i "s+web.service.port.*+port: 80+g" values.yml
+                sed -i "s+web.service.targetPort.*+targetPort: 80+g" values.yml
+                sed -i "s+web.containerPort.*+containerPort: 80+g" values.yml
+                
                 helm upgrade --install app fastapi-traefik --values=values.yml --namespace $NAMESPACE
                 '''
                 }
