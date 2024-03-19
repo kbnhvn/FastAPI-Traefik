@@ -121,7 +121,17 @@ serviceAccount:
 roleBinding:
   name: traefik-role-binding
 
+dashboardService:
+  name: traefik-dashboard-service
+  type: LoadBalancer
+  port: 8080
+  targetPort: dashboard
 
+webService:
+  name: traefik-web-service
+  type: LoadBalancer
+  port: 80
+  targetPort: web
 
 ingress:
   host: fastapi-traefik.cours-datascientest-devops.cloudns.be
