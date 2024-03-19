@@ -85,5 +85,36 @@ image:
       targetPort: 443
 
 
+role:
+  name: traefik-role
+  rules:
+    - apiGroups:
+        - ""
+      resources:
+        - services
+        - endpoints
+        - secrets
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - extensions
+        - networking.k8s.io
+      resources:
+        - ingresses
+        - ingressclasses
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - extensions
+        - networking.k8s.io
+      resources:
+        - ingresses/status
+      verbs:
+        - update
+
 ingress:
   host: fastapi-traefik.cours-datascientest-devops.cloudns.be
