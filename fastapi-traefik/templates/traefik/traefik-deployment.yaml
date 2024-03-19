@@ -19,6 +19,7 @@ spec:
         image: {{ .Values.traefik.repository }}:{{ .Values.traefik.tag }}
         args: {{ .Values.containerArgs }}
         ports: 
-        {{ .Values.containerPorts }}
+        {{- range .Values.containerPorts }}
         - name: {{ .name }}
           containerPort: {{ .port }}
+        {{- end }}
