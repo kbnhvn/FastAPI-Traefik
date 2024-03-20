@@ -72,7 +72,7 @@ stages {
 
                 #Lancement d'un container elasticsearch pour l'environnement de test de l'image datafetcher
                 docker run -d \
-                --name elsaticsearch --network es_network \
+                --name elasticsearch --network es_network \
                 -v elastic_data:/usr/share/elasticsearch/data \
                 -e node.name=es \
                 -e discovery.type=single-node \
