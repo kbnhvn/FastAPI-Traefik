@@ -17,7 +17,7 @@ stages {
                 steps {
                     script {
                         sh '''
-                        docker rm -f $DOCKER_IMAGE_DATA
+                        docker rm -f $DOCKER_IMAGE_DATA || true
                         docker build -t $DOCKER_ID/$DOCKER_IMAGE_DATA:$DOCKER_TAG ./datas
                         sleep 6
                         '''
@@ -28,8 +28,8 @@ stages {
                 steps {
                     script {
                         sh '''
-                        docker rm -f $DOCKER_IMAGE_WEB_DEV
-                        docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEB_DEV:$DOCKER_TAG ./BaseProject
+                        docker rm -f $DOCKER_IMAGE_WEB_DEV || true
+                        docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEB_DEV:$DOCKER_TAG ./baseProject
                         sleep 6
                         '''
                     }
@@ -39,8 +39,8 @@ stages {
                 steps {
                     script {
                         sh '''
-                        docker rm -f $DOCKER_IMAGE_WEB_PROD
-                        docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG -f ./BaseProject/Dockerfile.prod
+                        docker rm -f $DOCKER_IMAGE_WEB_PROD || true
+                        docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG -f ./baseProject/Dockerfile.prod
                         sleep 6
                         '''
                     }
