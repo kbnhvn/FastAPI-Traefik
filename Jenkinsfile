@@ -301,6 +301,5 @@ stage('Deploiement en prod'){
             }
 
         }
-
 }
 }
