@@ -15,11 +15,17 @@ spec:
       containers:
         - name: web
           image: {{ .Values.web.repository }}:{{ .Values.web.tag }}  # Image Docker à utiliser
-          command: ["bash", "-c"]  # Commande à exécuter dans le conteneur
+          # Ces valeurs ne sont nécessaires que dans l'image web-dev, dans le cas du déploiement en prod, le pipeline jenkins supprime ces valeurs. Cette vérification permet d'éviter les erreurs
+          {{- if .Values.web.command }}
+          command: {{ .Values.web.command }}
+          {{- end }}
+          {{- if .Values.web.arg }}
           args:
-            - "uvicorn app.main:app --host 0.0.0.0"  # Commande à exécuter
+            - {{ .Values.web.arg }}
+          {{- end }}
+          # ------------------------- #
           ports:
-            - containerPort: 8000  # Port exposé par le conteneur
+            - containerPort: "{{ .Values.web.containerPort }}"  # Port exposé par le conteneur
           env:
             - name: DATABASE_URL  # Variable d'environnement pour l'URL de la base de données
               value: "postgresql://{{ .Values.db.credentials.user }}:{{ .Values.db.credentials.password }}@db-service.{{ .Values.namespace }}.svc.cluster.local:5432/{{ .Values.db.config.db_name }}"  # Valeur de l'URL de la base de données
