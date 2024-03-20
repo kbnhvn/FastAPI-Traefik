@@ -17,7 +17,7 @@ stages {
                 steps {
                     script {
                         sh '''
-                        docker rm -f $DOCKER_IMAGE_DATA
+                        docker rm -f $DOCKER_IMAGE_DATA || true
                         docker build -t $DOCKER_ID/$DOCKER_IMAGE_DATA:$DOCKER_TAG ./datas
                         sleep 6
                         '''
@@ -28,8 +28,8 @@ stages {
                 steps {
                     script {
                         sh '''
-                        docker rm -f $DOCKER_IMAGE_WEB_DEV
-                        docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEB_DEV:$DOCKER_TAG ./BaseProject
+                        docker rm -f $DOCKER_IMAGE_WEB_DEV || true
+                        docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEB_DEV:$DOCKER_TAG ./baseProject
                         sleep 6
                         '''
                     }
@@ -39,8 +39,8 @@ stages {
                 steps {
                     script {
                         sh '''
-                        docker rm -f $DOCKER_IMAGE_WEB_PROD
-                        docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG -f ./BaseProject/Dockerfile.prod
+                        docker rm -f $DOCKER_IMAGE_WEB_PROD || true
+                        docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG -f ./baseProject/Dockerfile.prod ./baseProject
                         sleep 6
                         '''
                     }
@@ -53,7 +53,7 @@ stages {
             script {
                 sh '''
                 # Suppression BDD
-                docker container rm -f postgres || true
+                docker container rm -f db || true
                 docker container rm -f elasticsearch || true
 
                 # Création reseaux
@@ -62,7 +62,7 @@ stages {
 
                 #Lancement d'un container postgres pour l'environnement de test des images web
                 docker run -d \
-                --name postgres --network pg_network\
+                --name db --network pg_network\
                 -v postgres_data:/var/lib/postgresql/data/ \
                 -e POSTGRES_USER=fastapi_traefik \
                 -e POSTGRES_PASSWORD=fastapi_traefik \
@@ -72,7 +72,7 @@ stages {
 
                 #Lancement d'un container elasticsearch pour l'environnement de test de l'image datafetcher
                 docker run -d \
-                --name elsaticsearch --network es_network \
+                --name elasticsearch --network es_network \
                 -v elastic_data:/usr/share/elasticsearch/data \
                 -e node.name=es \
                 -e discovery.type=single-node \
@@ -103,7 +103,7 @@ stages {
                     script {
                         sh '''
                         docker run -d -p 8000:8000 --name $DOCKER_IMAGE_WEB_DEV --network pg_network\
-                        -e DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@postgres:5432/fastapi_traefik \
+                        -e DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik \
                         $DOCKER_ID/$DOCKER_IMAGE_WEB_DEV:$DOCKER_TAG \
                         bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0'
                         sleep 10
@@ -116,8 +116,8 @@ stages {
                     script {
                         sh '''
                         docker run -d -p 8001:80 --name $DOCKER_IMAGE_WEB_PROD --network pg_network\
-                        -e DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@postgres:5432/fastapi_traefik \
-                        $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG \
+                        -e DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik \
+                        $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG
                         sleep 10
                         '''
                     }
@@ -301,6 +301,5 @@ stage('Deploiement en prod'){
             }
 
         }
-
 }
 }
