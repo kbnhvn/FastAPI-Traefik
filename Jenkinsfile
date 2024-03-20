@@ -205,10 +205,10 @@ stages {
     }
 
 stage('Deploiement en dev'){
-        when 
-        {
-        branch 'develop' // Cette condition s'assure que le stage ne s'exécute que sur la branche develop
-        }
+        // when 
+        //{
+        //branch 'develop' // Cette condition s'assure que le stage ne s'exécute que sur la branche develop
+        //}
         environment
         {
         KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
