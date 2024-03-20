@@ -40,7 +40,7 @@ stages {
                     script {
                         sh '''
                         docker rm -f $DOCKER_IMAGE_WEB_PROD || true
-                        docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG -f ./baseProject/Dockerfile.prod
+                        docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG -f ./baseProject/Dockerfile.prod ./baseProject
                         sleep 6
                         '''
                     }
