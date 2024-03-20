@@ -62,7 +62,7 @@ stages {
 
                 #Lancement d'un container postgres pour l'environnement de test des images web
                 docker run -d \
-                --name postgres --network pg_network\
+                --name db --network pg_network\
                 -v postgres_data:/var/lib/postgresql/data/ \
                 -e POSTGRES_USER=fastapi_traefik \
                 -e POSTGRES_PASSWORD=fastapi_traefik \
@@ -103,7 +103,7 @@ stages {
                     script {
                         sh '''
                         docker run -d -p 8000:8000 --name $DOCKER_IMAGE_WEB_DEV --network pg_network\
-                        -e DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@postgres:5432/fastapi_traefik \
+                        -e DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik \
                         $DOCKER_ID/$DOCKER_IMAGE_WEB_DEV:$DOCKER_TAG \
                         bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0'
                         sleep 10
@@ -116,7 +116,7 @@ stages {
                     script {
                         sh '''
                         docker run -d -p 8001:80 --name $DOCKER_IMAGE_WEB_PROD --network pg_network\
-                        -e DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@postgres:5432/fastapi_traefik \
+                        -e DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik \
                         $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG \
                         sleep 10
                         '''
