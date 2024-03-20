@@ -53,7 +53,7 @@ stages {
             script {
                 sh '''
                 # Suppression BDD
-                docker container rm -f postgres || true
+                docker container rm -f db || true
                 docker container rm -f elasticsearch || true
 
                 # Création reseaux
