@@ -5,7 +5,7 @@
 namespace: ""
 
 data:
-  schedule: "15 14 * * *" # A définir
+  schedule: "15 14 * * *"     # A définir
   repository: kbnhvn/datafetcher
   tag: latest
   index_name: qualite_air
@@ -22,7 +22,7 @@ web:
     type: ClusterIP
     web_port: 8000
     web_targetPort: 8000
-  config: 
+  config:
     script_name: /api/admin
 
 db:
@@ -32,8 +32,8 @@ db:
   service:
     type: ClusterIP
   storage:
-    capacity: 10Gi 
-  config: 
+    capacity: 10Gi
+  config:
     db_name: fastapi_traefik
   credentials:
     secret_file: db-secret
@@ -41,11 +41,11 @@ db:
 pgadmin:
   replicaCount: 1
   repository: dpage/pgadmin4
-  tag: 
+  tag:
   service:
     type: ClusterIP
     port: 8080
-  config: 
+  config:
     script_name: /api/admin
   credentials:
     secret_file: pgadmin-secret
@@ -67,7 +67,7 @@ elasticsearch:
   service:
     type: ClusterIP
   storage:
-    capacity: 10Gi 
+    capacity: 10Gi
   config:
     node_name: es
     discovery_type: single-node
@@ -75,4 +75,4 @@ elasticsearch:
 # traefik:
 
 ingress:
-  host: fastapi-traefik.cours-datascientest-devops.cloudns.be
+  host: "fastapi-traefik.cours-datascientest-devops.cloudns.be"
