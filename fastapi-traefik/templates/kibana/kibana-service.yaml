@@ -7,6 +7,6 @@ spec:
     app: kibana
   ports:
     - protocol: TCP
-      port: "{{ .Values.kibana.service.port }}"
+      port: {{ .Values.kibana.service.port }}
       targetPort: 5601
   type: {{ .Values.kibana.service.type }}
