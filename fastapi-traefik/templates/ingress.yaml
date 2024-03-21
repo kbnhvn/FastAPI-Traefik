@@ -9,7 +9,7 @@ spec:
   #     hosts:
   #       - 
   rules:
-  - host: {{ .Values.ingress.ingress_host }}
+  - host: {{ .Values.ingress.host }}
     http:
       paths:
         # Path api web

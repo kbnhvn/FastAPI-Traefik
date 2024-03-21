@@ -13,15 +13,15 @@ data:
 
 web:
   replicaCount: 1
-  web_repository: kbnhvn/web-dev
+  repository: kbnhvn/web-dev
   tag: latest
   command: ["bash", "-c"]
   arg: ["uvicorn app.main:app --host 0.0.0.0"]
-  web_containerPort: 8000
+  containerPort: 8000
   service:
     type: ClusterIP
-    web_port: 8000
-    web_targetPort: 8000
+    port: 8000
+    targetPort: 8000
   config:
     script_name: /api/admin
 
@@ -73,6 +73,6 @@ elasticsearch:
     discovery_type: single-node
 
 ingress:
-  ingress_host: fastapi-traefik.cours-datascientest-devops.cloudns.be
+  host: fastapi-traefik.cours-datascientest-devops.cloudns.be
 
 traefik:

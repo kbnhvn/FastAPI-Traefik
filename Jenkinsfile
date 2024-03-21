@@ -231,13 +231,14 @@ stage('Deploiement en dev'){
                 sed -i "s+namespace.*+namespace: ${NAMESPACE}+g" values.yml
 
                 # Modification des tags
-                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                sed -i "s+web.tag.*+web.tag: ${DOCKER_TAG}+g" values.yml
+                sed -i "s+data.tag.*+data.tag: ${DOCKER_TAG}+g" values.yml
 
                 # Modification du repository pour l'image web
-                sed -i "s+web_repository.*+web_repository: ${DOCKER_ID}/${DOCKER_IMAGE_WEB_DEV}+g" values.yml
+                sed -i "s+web.repository.*+web.repository: ${DOCKER_ID}/${DOCKER_IMAGE_WEB_DEV}+g" values.yml
 
                 # Modification du ingress host
-                sed -i "s+ingress_host.*+ingress_host: ${DEV_HOSTNAME}+g" values.yml
+                sed -i "s+ingress.host.*+ingress.host: ${DEV_HOSTNAME}+g" values.yml
 
                 helm upgrade --install app fastapi-traefik --values=values.yml --namespace $NAMESPACE
                 '''
@@ -278,20 +279,21 @@ stage('Deploiement en prod'){
                 sed -i "s+namespace.*+namespace: ${NAMESPACE}+g" values.yml
 
                 # Modification des tags
-                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                sed -i "s+web.tag.*+web.tag: ${DOCKER_TAG}+g" values.yml
+                sed -i "s+data.tag.*+data.tag: ${DOCKER_TAG}+g" values.yml
 
                 # Modification du repository pour l'image web
-                sed -i "s+web_repository.*+web_repository: ${DOCKER_ID}/${DOCKER_IMAGE_WEB_PROD}+g" values.yml
+                sed -i "s+web.repository.*+web.repository: ${DOCKER_ID}/${DOCKER_IMAGE_WEB_PROD}+g" values.yml
 
                 # Modification du ingress host
-                sed -i "s+ingress_host.*+ingress_host: ${PROD_HOSTNAME}+g" values.yml
+                sed -i "s+ingress.host.*+ingress.host: ${PROD_HOSTNAME}+g" values.yml
 
                 # ------ Modifications relatives aux ENV de l'image PROD uniquement ----
                 sed -i '/command/d' values.yml
                 sed -i '/arg/d' values.yml
-                sed -i "s+web_port.*+web_port: 80+g" values.yml
-                sed -i "s+web_targetPort.*+web_targetPort: 80+g" values.yml
-                sed -i "s+web_containerPort.*+web_containerPort: 80+g" values.yml
+                sed -i "s+web.service.port.*+web.service.port: 80+g" values.yml
+                sed -i "s+web.service.targetPort.*+web.service.targetPort: 80+g" values.yml
+                sed -i "s+web.containerPort.*+web.containerPort: 80+g" values.yml
                 
                 helm upgrade --install app fastapi-traefik --values=values.yml --namespace $NAMESPACE
                 '''
