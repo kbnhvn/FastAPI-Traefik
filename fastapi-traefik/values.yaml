@@ -16,7 +16,7 @@ web:
   web_repository: kbnhvn/web-dev
   tag: latest
   command: ["bash", "-c"]
-  arg: "uvicorn app.main:app --host 0.0.0.0"
+  arg: uvicorn app.main:app --host 0.0.0.0
   web_containerPort: 8000
   service:
     type: ClusterIP
@@ -73,6 +73,6 @@ elasticsearch:
     discovery_type: single-node
 
 ingress:
-  host: "fastapi-traefik.cours-datascientest-devops.cloudns.be"
+  host: fastapi-traefik.cours-datascientest-devops.cloudns.be
 
 traefik:
