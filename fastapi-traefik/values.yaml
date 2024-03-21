@@ -69,8 +69,8 @@ elasticsearch:
   storage:
     capacity: 10Gi 
   config:
-    node_name: "es"
-    discovery_type: "single-node"
+    node_name: es
+    discovery_type: single-node
 
 traefik:
 
