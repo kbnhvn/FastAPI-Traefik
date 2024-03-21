@@ -72,8 +72,7 @@ elasticsearch:
     node_name: es
     discovery_type: single-node
 
-traefik:
-
+# traefik:
 
 ingress:
   host: fastapi-traefik.cours-datascientest-devops.cloudns.be
