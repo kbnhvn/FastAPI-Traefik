@@ -230,15 +230,14 @@ stage('Deploiement en dev'){
                 # Modification du namespace
                 sed -i "s+namespace.*+namespace: ${NAMESPACE}+g" values.yml
 
-                # Modification du tag pour l'image datafetcher
-                sed -i "s+data.tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                # Modification des tags
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
 
-                # Modification des valeurs pour l'image web
-                sed -i "s+web.repository.*+repository: ${DOCKER_ID}/${DOCKER_IMAGE_WEB_DEV}+g" values.yml
-                sed -i "s+web.tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                # Modification du repository pour l'image web
+                sed -i "s+web_repository.*+web_repository: ${DOCKER_ID}/${DOCKER_IMAGE_WEB_DEV}+g" values.yml
 
                 # Modification du ingress host
-                sed -i "s+ingress.host.*+host: ${DEV_HOSTNAME}+g" values.yml
+                sed -i "s+host.*+host: ${DEV_HOSTNAME}+g" values.yml
 
                 helm upgrade --install app fastapi-traefik --values=values.yml --namespace $NAMESPACE
                 '''
@@ -278,22 +277,21 @@ stage('Deploiement en prod'){
                 # Modification du namespace
                 sed -i "s+namespace.*+namespace: ${NAMESPACE}+g" values.yml
 
-                # Modification du tag pour l'image datafetcher
-                sed -i "s+data.tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                # Modification des tags
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
 
-                # Modification des valeurs pour l'image web
-                sed -i "s+web.repository.*+repository: ${DOCKER_ID}/${DOCKER_IMAGE_WEB_PROD}+g" values.yml
-                sed -i "s+web.tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                # Modification du repository pour l'image web
+                sed -i "s+web_repository.*+web_repository: ${DOCKER_ID}/${DOCKER_IMAGE_WEB_PROD}+g" values.yml
 
                 # Modification du ingress host
-                sed -i "s+ingress.host.*+host: ${PROD_HOSTNAME}+g" values.yml
+                sed -i "s+host.*+host: ${PROD_HOSTNAME}+g" values.yml
 
                 # ------ Modifications relatives aux ENV de l'image PROD uniquement ----
-                sed -i '/web.command/d' values.yml
-                sed -i '/web.arg/d' values.yml
-                sed -i "s+web.service.port.*+port: 80+g" values.yml
-                sed -i "s+web.service.targetPort.*+targetPort: 80+g" values.yml
-                sed -i "s+web.containerPort.*+containerPort: 80+g" values.yml
+                sed -i '/command/d' values.yml
+                sed -i '/arg/d' values.yml
+                sed -i "s+web_port.*+web_port: 80+g" values.yml
+                sed -i "s+web_targetPort.*+web_targetPort: 80+g" values.yml
+                sed -i "s+web_containerPort.*+web_containerPort: 80+g" values.yml
                 
                 helm upgrade --install app fastapi-traefik --values=values.yml --namespace $NAMESPACE
                 '''
