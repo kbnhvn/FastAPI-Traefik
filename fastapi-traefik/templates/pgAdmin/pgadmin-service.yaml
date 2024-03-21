@@ -7,5 +7,5 @@ spec:
   selector:
     app: pgadmin
   ports:
-  - port: "{{ .Values.pgadmin.service.port }}"
+  - port: {{ .Values.pgadmin.service.port }}
     targetPort: 80
