@@ -7,14 +7,14 @@ namespace: ""
 data:
   schedule: "15 14 * * *" # A définir
   repository: kbnhvn/datafetcher
-  tag: v.0.0.1
+  tag: latest
   index_name: qualite_air
   external_api_url: https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/qualite-de-lair-france/records?limit=-1
 
 web:
   replicaCount: 1
   repository: kbnhvn/web-dev
-  tag: v.0.0.1
+  tag: latest
   command: ["bash", "-c"]
   arg: "uvicorn app.main:app --host 0.0.0.0"
   containerPort: 8000
