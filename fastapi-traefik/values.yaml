@@ -58,7 +58,7 @@ kibana:
     type: ClusterIP
     port: 5601
   config:
-    server_basepath: "/api/kibana"
+    server_basepath: /api/kibana
 
 elasticsearch:
   replicaCount: 1
