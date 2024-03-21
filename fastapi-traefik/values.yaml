@@ -73,6 +73,6 @@ elasticsearch:
     discovery_type: single-node
 
 ingress:
-  host: fastapi-traefik.cours-datascientest-devops.cloudns.be
+  ingress_host: fastapi-traefik.cours-datascientest-devops.cloudns.be
 
 traefik:

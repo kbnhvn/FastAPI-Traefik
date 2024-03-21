@@ -237,7 +237,7 @@ stage('Deploiement en dev'){
                 sed -i "s+web_repository.*+web_repository: ${DOCKER_ID}/${DOCKER_IMAGE_WEB_DEV}+g" values.yml
 
                 # Modification du ingress host
-                sed -i "s+host.*+host: ${DEV_HOSTNAME}+g" values.yml
+                sed -i "s+ingress_host.*+ingress_host: ${DEV_HOSTNAME}+g" values.yml
 
                 helm upgrade --install app fastapi-traefik --values=values.yml --namespace $NAMESPACE
                 '''
@@ -284,7 +284,7 @@ stage('Deploiement en prod'){
                 sed -i "s+web_repository.*+web_repository: ${DOCKER_ID}/${DOCKER_IMAGE_WEB_PROD}+g" values.yml
 
                 # Modification du ingress host
-                sed -i "s+host.*+host: ${PROD_HOSTNAME}+g" values.yml
+                sed -i "s+ingress_host.*+ingress_host: ${PROD_HOSTNAME}+g" values.yml
 
                 # ------ Modifications relatives aux ENV de l'image PROD uniquement ----
                 sed -i '/command/d' values.yml
