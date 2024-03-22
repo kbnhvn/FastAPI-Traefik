@@ -72,6 +72,72 @@ elasticsearch:
     node_name: es
     discovery_type: single-node
 
+traefik:
+  image:
+    repository: traefik
+    tag: v2.9.6
+    pullPolicy: IfNotPresent
+  replicaCount: 1
+  serviceAccountName: traefik-service-account
+  args:
+    - "--log.level=DEBUG"
+    - "--api.insecure"
+    - "--providers.kubernetesingress"
+  ports:
+    web:
+      containerPort: 80
+    dashboard:
+      containerPort: 8080
+
+role:
+  name: traefik-role
+  rules:
+    - apiGroups:
+        - ""
+      resources:
+        - services
+        - endpoints
+        - secrets
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - extensions
+        - networking.k8s.io
+      resources:
+        - ingresses
+        - ingressclasses
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - extensions
+        - networking.k8s.io
+      resources:
+        - ingresses/status
+      verbs:
+        - update
+
+serviceAccount:
+  name: traefik-service-account
+
+roleBinding:
+  name: traefik-role-binding
+
+dashboardService:
+  name: traefik-dashboard-service
+  type: LoadBalancer
+  port: 8080
+  targetPort: dashboard
+
+webService:
+  name: traefik-web-service
+  type: LoadBalancer
+  port: 80
+  targetPort: web
+
 ingress:
   host: fastapi-traefik.cours-datascientest-devops.cloudns.be
 
