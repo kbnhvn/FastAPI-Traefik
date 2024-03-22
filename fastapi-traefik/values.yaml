@@ -73,11 +73,11 @@ elasticsearch:
     discovery_type: single-node
 
 traefik:
+  replicaCount: 1
   image:
     repository: traefik
     tag: v2.9.6
     pullPolicy: IfNotPresent
-  replicaCount: 1
   serviceAccountName: traefik-service-account
   args:
     - "--log.level=DEBUG"
@@ -141,4 +141,3 @@ webService:
 ingress:
   host: fastapi-traefik.cours-datascientest-devops.cloudns.be
 
-traefik:
