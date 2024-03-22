@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: traefik-deployment
-
 spec:
   replicas: {{ .Values.traefik.replicaCount }}
   selector:
@@ -13,13 +12,14 @@ spec:
       labels:
         app: traefik
     spec:
-      serviceAccountName: traefik-service-account
+      serviceAccountName: {{ .Values.traefik.serviceAccountName }}
       containers:
-      - name: traefik
-        image: {{ .Values.traefik.repository }}:{{ .Values.traefik.tag }}
-        args: {{ .Values.containerArgs }}
-        ports: 
-        {{- range .Values.containerPorts }}
-        - name: {{ .name }}
-          containerPort: {{ .port }}
-        {{- end }}
+        - name: traefik
+          image: "{{ .Values.traefik.image.repository }}:{{ .Values.traefik.image.tag }}"
+          imagePullPolicy: {{ .Values.traefik.image.pullPolicy }}
+          args: {{ .Values.traefik.args | toYaml | nindent 12 }}
+          ports:
+            - name: web
+              containerPort: {{ .Values.traefik.ports.web.containerPort }}
+            - name: dashboard
+              containerPort: {{ .Values.traefik.ports.dashboard.containerPort }}
