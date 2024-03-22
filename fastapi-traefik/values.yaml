@@ -130,9 +130,9 @@ roleBinding:
 
 dashboardService:
   name: traefik-dashboard-service
-  type: LoadBalancer
+  type: ClusterIP
   port: 8080
-  targetPort: ClusterIP
+  targetPort: dashboard
 
 webService:
   name: traefik-web-service
