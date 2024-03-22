@@ -3,10 +3,10 @@ kind: Deployment
 metadata:
   name: traefik-deployment
 spec:
-  replicas: {{ .Values.traefik.replicaCount }}
   selector:
     matchLabels:
       app: traefik
+  replicas: {{ .Values.traefik.replicaCount }}
   template:
     metadata:
       labels:

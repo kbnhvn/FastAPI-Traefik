@@ -37,10 +37,10 @@ spec:
               port:
                 number: 5601
         # Path dashboard traefik
-        # - path: /dashboard
-        #   pathType: Prefix
-        #   backend:
-        #      service:
-        #       name: api@internal
-        #       port:
-        #         number: 8080
+        - path: /dashboard
+          pathType: Prefix
+          backend:
+             service:
+              name: {{ .Values.dashboardService.name }}
+              port:
+                number: {{ .Values.dashboardService.port }}
