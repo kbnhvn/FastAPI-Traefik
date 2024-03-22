@@ -235,7 +235,7 @@ stage('Deploiement en dev'){
                 yq eval ".data.tag = strenv(DOCKER_TAG)" -i values.yml
 
                 # Modification du repository pour l'image web
-                yq eval ".web.repository = strenv(DOCKER_ID) + "/" + strenv(DOCKER_IMAGE_WEB_DEV)" -i values.yml
+                yq eval ".web.repository = strenv(DOCKER_ID) + \"/\" + strenv(DOCKER_IMAGE_WEB_DEV)" -i values.yml
 
                 # Modification du ingress host
                 yq eval ".ingress.host = strenv(DEV_HOSTNAME)" -i values.yml
@@ -283,7 +283,7 @@ stage('Deploiement en prod'){
                 yq eval ".data.tag = strenv(DOCKER_TAG)" -i values.yml
 
                 # Modification du repository pour l'image web
-                yq eval ".web.repository = strenv(DOCKER_ID) + "/" + strenv(DOCKER_IMAGE_WEB_PROD)" -i values.yml
+                yq eval ".web.repository = strenv(DOCKER_ID) + \"/\" + strenv(DOCKER_IMAGE_WEB_PROD)" -i values.yml
 
                 # Modification du ingress host
                 yq eval ".ingress.host = strenv(PROD_HOSTNAME)" -i values.yml
