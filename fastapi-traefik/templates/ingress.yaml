@@ -45,4 +45,4 @@ spec:
              service:
               name: {{ .Values.dashboardService.name }}
               port:
-                name: {{ .Values.dashboardService.name }}
+                number: {{ .Values.dashboardService.port }}
