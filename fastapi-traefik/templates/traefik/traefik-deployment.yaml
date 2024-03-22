@@ -21,5 +21,7 @@ spec:
           ports:
             - name: web
               containerPort: {{ .Values.traefik.ports.web.containerPort }}
+            - name: websecure
+              containerPort: {{ .Values.traefik.ports.websecure.containerPort }}
             - name: dashboard
               containerPort: {{ .Values.traefik.ports.dashboard.containerPort }}

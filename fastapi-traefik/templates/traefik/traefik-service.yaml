@@ -22,3 +22,16 @@ spec:
       targetPort: {{ .Values.webService.targetPort }}
   selector:
     app: traefik
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.webSecureService.name }}
+spec:
+  type: {{ .Values.webSecureService.type }}
+  ports:
+    - port: {{ .Values.webSecureService.port }}
+      targetPort: {{ .Values.webSecureService.targetPort }}
+  selector:
+    app: traefik
