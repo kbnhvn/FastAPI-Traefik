@@ -21,7 +21,7 @@ spec:
           {{- end }}
           {{- if .Values.web.arg }}
           args:
-            - {{ .Values.web.arg }}
+            - {{- toYaml .Values.web.arg | nindent 14 }}
           {{- end }}
           # ------------------------- #
           ports:
@@ -29,3 +29,4 @@ spec:
           env:
             - name: DATABASE_URL  # Variable d'environnement pour l'URL de la base de données
               value: "postgresql://{{ .Values.db.credentials.user }}:{{ .Values.db.credentials.password }}@db-service.{{ .Values.namespace }}.svc.cluster.local:5432/{{ .Values.db.config.db_name }}"  # Valeur de l'URL de la base de données
+              
