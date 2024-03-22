@@ -15,7 +15,9 @@ web:
   replicaCount: 1
   repository: kbnhvn/web-dev
   tag: latest
-  command: ["/bin/bash", "-c", "uvicorn app.main:app --host 0.0.0.0"]
+  command: ["/bin/bash", "-c"]
+  args: 
+    - uvicorn app.main:app --host 0.0.0.0
   containerPort: 8000
   service:
     type: ClusterIP

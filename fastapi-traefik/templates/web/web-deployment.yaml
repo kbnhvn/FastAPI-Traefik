@@ -19,6 +19,9 @@ spec:
           {{- if .Values.web.command }}
           command: {{ .Values.web.command }}
           {{- end }}
+          {{- if .Values.web.args }}
+          args: {{ .Values.web.args }}
+          {{- end }}
           # ------------------------- #
           ports:
             - containerPort: {{ .Values.web.containerPort }}  # Port exposé par le conteneur
