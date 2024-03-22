@@ -17,10 +17,10 @@ spec:
           image: {{ .Values.web.repository }}:{{ .Values.web.tag }}  # Image Docker à utiliser
           # Ces valeurs ne sont nécessaires que dans l'image web-dev, dans le cas du déploiement en prod, le pipeline jenkins supprime ces valeurs. Cette vérification permet d'éviter les erreurs
           {{- if .Values.web.command }}
-          command: {{ .Values.web.command }}
+          command: {{ .Values.web.command | toYaml | indent 12}}
           {{- end }}
           {{- if .Values.web.args }}
-          args: {{ .Values.web.args }}
+          args: {{ .Values.web.args | toYaml | indent 12}}
           {{- end }}
           # ------------------------- #
           ports:
