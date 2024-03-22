@@ -5,20 +5,24 @@
 namespace: ""
 
 data:
-  schedule: "45 17 * * *" # A définir
+  schedule: "15 14 * * *"     # A définir
   repository: kbnhvn/datafetcher
-  tag: v.0.0.1
+  tag: latest
   index_name: qualite_air
   external_api_url: https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/qualite-de-lair-france/records?limit=-1
 
 web:
   replicaCount: 1
   repository: kbnhvn/web-dev
-  tag: v.0.0.1
+  tag: latest
+  command: ["bash", "-c"]
+  args: ["uvicorn app.main:app --host 0.0.0.0"]
+  containerPort: 8000
   service:
     type: ClusterIP
     port: 8000
-  config: 
+    targetPort: 8000
+  config:
     script_name: /api/admin
 
 db:
@@ -28,8 +32,8 @@ db:
   service:
     type: ClusterIP
   storage:
-    capacity: 10Gi 
-  config: 
+    capacity: 10Gi
+  config:
     db_name: fastapi_traefik
   credentials:
     secret_file: db-secret
@@ -37,11 +41,11 @@ db:
 pgadmin:
   replicaCount: 1
   repository: dpage/pgadmin4
-  tag: 
+  tag:
   service:
     type: ClusterIP
     port: 8080
-  config: 
+  config:
     script_name: /api/admin
   credentials:
     secret_file: pgadmin-secret
@@ -54,7 +58,7 @@ kibana:
     type: ClusterIP
     port: 5601
   config:
-    server_basepath: "/api/kibana"
+    server_basepath: /api/kibana
 
 elasticsearch:
   replicaCount: 1
@@ -63,10 +67,10 @@ elasticsearch:
   service:
     type: ClusterIP
   storage:
-    capacity: 10Gi 
+    capacity: 10Gi
   config:
-    node_name: "es"
-    discovery_type: "single-node"
+    node_name: es
+    discovery_type: single-node
 
 traefik:
   image:
@@ -136,3 +140,5 @@ webService:
 
 ingress:
   host: fastapi-traefik.cours-datascientest-devops.cloudns.be
+
+traefik:
