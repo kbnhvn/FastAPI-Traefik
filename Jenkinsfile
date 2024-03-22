@@ -228,17 +228,17 @@ stage('Deploiement en dev'){
                 cat values.yml
 
                 # Modification du namespace
-                yq eval ".namespace = \"${NAMESPACE}\"" -i values.yml
+                yq eval ".namespace = \"${env.NAMESPACE}\"" -i values.yml
 
                 # Modification des tags
-                yq eval ".web.tag = \"${DOCKER_TAG}\"" -i values.yml
-                yq eval ".data.tag = \"${DOCKER_TAG}\"" -i values.yml
+                yq eval ".web.tag = \"${env.DOCKER_TAG}\"" -i values.yml
+                yq eval ".data.tag = \"${env.DOCKER_TAG}\"" -i values.yml
 
                 # Modification du repository pour l'image web
-                yq eval ".web.repository = \"${DOCKER_ID}/${DOCKER_IMAGE_WEB_DEV}\"" -i values.yml
+                yq eval ".web.repository = \"${env.DOCKER_ID}/${env.DOCKER_IMAGE_WEB_DEV}\"" -i values.yml
 
                 # Modification du ingress host
-                yq eval ".ingress.host = \"${DEV_HOSTNAME}\"" -i values.yml
+                yq eval ".ingress.host = \"${env.DEV_HOSTNAME}\"" -i values.yml
 
                 helm upgrade --install app fastapi-traefik --values=values.yml --namespace $NAMESPACE
                 '''
@@ -276,17 +276,17 @@ stage('Deploiement en prod'){
                 cat values.yml
 
                 # Modification du namespace
-                yq eval ".namespace = \"${NAMESPACE}\"" -i values.yml
+                yq eval ".namespace = \"${env.NAMESPACE}\"" -i values.yml
 
                 # Modification des tags
-                yq eval ".web.tag = \"${DOCKER_TAG}\"" -i values.yml
-                yq eval ".data.tag = \"${DOCKER_TAG}\"" -i values.yml
+                yq eval ".web.tag = \"${env.DOCKER_TAG}\"" -i values.yml
+                yq eval ".data.tag = \"${env.DOCKER_TAG}\"" -i values.yml
 
                 # Modification du repository pour l'image web
-                yq eval ".web.repository = \"${DOCKER_ID}/${DOCKER_IMAGE_WEB_PROD}\"" -i values.yml
+                yq eval ".web.repository = \"${env.DOCKER_ID}/${env.DOCKER_IMAGE_WEB_PROD}\"" -i values.yml
 
                 # Modification du ingress host
-                yq eval ".ingress.host = \"${PROD_HOSTNAME}\"" -i values.yml
+                yq eval ".ingress.host = \"${env.PROD_HOSTNAME}\"" -i values.yml
 
                 # ------ Modifications relatives aux ENV de l'image PROD uniquement ----
                 sed -i "/command/d" values.yml
