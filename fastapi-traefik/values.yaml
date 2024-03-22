@@ -17,7 +17,7 @@ web:
   tag: latest
   command: ["bash", "-c"]
   args:
-    - "uvicorn app.main:app --host 0.0.0.0"
+    - "'uvicorn app.main:app --host 0.0.0.0'"
   containerPort: 8000
   service:
     type: ClusterIP
