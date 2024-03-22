@@ -8,10 +8,13 @@ Le cluster k3s et jenkins tournent sur un EC2 AWS.
 
 Pour accéder à l'environnement **dev** (basé sur la branche ```develop```) :
 - dev.fastapi-traefik.cloudns.ch
+  
 Pour accéder à l'environnement **prod** (basé sur la branche ```master```) :
 - prod.fastapi-traefik.cloudns.ch
+  
 Pour accéder à **jenkins** :
 - http://15.237.207.19:8080
+  
 
 ## Notes et instructions de dev :
 
