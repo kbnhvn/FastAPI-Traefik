@@ -80,9 +80,10 @@ traefik:
     pullPolicy: IfNotPresent
   serviceAccountName: traefik-service-account
   args:
-    # - "--log.level=DEBUG"
+    - "--log.level=DEBUG"
     - "--api.insecure"
-    # - "--providers.kubernetesingress"
+    - "--api.dashboard=false"
+    - "--providers.kubernetesingress"
   ports:
     web:
       containerPort: 80
