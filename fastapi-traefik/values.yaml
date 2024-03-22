@@ -16,7 +16,7 @@ web:
   repository: kbnhvn/web-dev
   tag: latest
   command: ["/bin/bash", "-c"]
-  arg: ["uvicorn app.main:app --host 0.0.0.0"]
+  arg: "uvicorn app.main:app --host 0.0.0.0"
   containerPort: 8000
   service:
     type: ClusterIP
