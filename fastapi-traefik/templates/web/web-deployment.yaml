@@ -30,4 +30,4 @@ spec:
               value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db-service.{{ .Values.namespace }}.svc.cluster.local:5432/{{ .Values.db.config.db_name }}"  # Valeur de l'URL de la base de données
           envFrom:
             - secretRef:
-                name: db-secret  # Référence au Secret contenant les informations d'identification
+                name: "{{ .Values.db.credentials.secret_file }}"
