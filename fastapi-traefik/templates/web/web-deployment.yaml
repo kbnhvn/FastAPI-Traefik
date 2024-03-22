@@ -19,9 +19,8 @@ spec:
           {{- if .Values.web.command }}
           command: {{ .Values.web.command }}
           {{- end }}
-          {{- if .Values.web.arg }}
-          args:
-            - {{ .Values.web.arg }}
+          {{- if .Values.web.args }}
+          args: {{ .Values.web.args }}
           {{- end }}
           # ------------------------- #
           ports:
