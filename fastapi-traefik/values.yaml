@@ -145,6 +145,7 @@ webSecureService:
   type: LoadBalancer
   port: 443
   targetPort: websecure
+
 ingress:
   host: fastapi-traefik.cours-datascientest-devops.cloudns.be
 
