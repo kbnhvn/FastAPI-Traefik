@@ -81,8 +81,13 @@ traefik:
   serviceAccountName: traefik-service-account
   args:
     - "--log.level=DEBUG"
-    - "--api.insecure"
+    - "--api"
+    - "--api.insecure=true"
+    - "--api.dashboard=true"
     - "--providers.kubernetesingress"
+    - "--providers.kubernetescrd"
+    - "--entrypoints.web.Address=:80"
+    - "--entrypoints.websecure.Address=:443"
   ports:
     web:
       containerPort: 80
