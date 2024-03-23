@@ -13,7 +13,7 @@ Pour accéder à l'environnement **prod** (basé sur la branche ```master```) :
 - http://prod.fastapi-traefik.cloudns.ch
   
 Pour accéder à **jenkins** :
-- http://15.237.207.19:8080
+- http://15.237.207.19:9090
   
 
 ## Notes et instructions de dev :
