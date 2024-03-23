@@ -82,7 +82,6 @@ traefik:
   args:
     - "--log.level=DEBUG"
     - "--api.insecure"
-    - "--api.dashboard=false"
     - "--providers.kubernetesingress"
   ports:
     web:
