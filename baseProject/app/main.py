@@ -15,14 +15,14 @@ class UserSignup(BaseModel):
 description= """
 ## User
 
-**User is defined by :
+** User is defined by : **
 - First name
 - Last name
 - Password
 - Mail (unique)
 - City
 
-**All values are required except city**
+** All values are required except city **
 
 ## Features
 
