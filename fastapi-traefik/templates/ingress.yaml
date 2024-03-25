@@ -15,16 +15,8 @@ spec:
     http:
       paths:
         # Path api web
-        - path: /
-          pathType: Exact
-          backend:
-             service:
-              name: web-service
-              port:
-                number: 8000
-        # Path api web docs
-        - path: /docs
-          pathType: Exact
+        - path: /users
+          pathType: prefix
           backend:
              service:
               name: web-service
