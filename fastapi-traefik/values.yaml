@@ -81,6 +81,7 @@ traefik:
   serviceAccountName: traefik-service-account
   args:
     - "--log.level=DEBUG"
+    - "--accesslog=true"
     - "--api.insecure=true"
     - "--providers.kubernetesingress=true"
     - "--entrypoints.web.Address=:80"
