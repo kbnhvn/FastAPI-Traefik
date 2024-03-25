@@ -1,28 +1,25 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, EmailStr
 from app.db import database, User
+from app.models import UserSignup, LoginData
 
+# Utilisé pour la vérification de l'unicité de l'email
+from asyncpg.exceptions import UniqueViolationError
 # Pour la gestion des hash mots de passe
 from passlib.context import CryptContext
 # Configuration de passlib (deprecated=auto permet d'utiliser les algos les plus sécurisés)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Permet la vérification de la valeur email = type email
-class UserSignup(BaseModel):
-    email: EmailStr
-    password: str
-
 description= """
 ## User
 
-** User is defined by : **
+**User is defined by :**
 - First name
 - Last name
 - Password
 - Mail (unique)
 - City
 
-** All values are required except city **
+**All values are required except city**
 
 ## Features
 
@@ -64,16 +61,16 @@ async def signup(user: UserSignup):
         raise HTTPException(status_code=422, detail="Password must have at least 8 characters")
     try:
         hashed_password = pwd_context.hash(user.password)
-        new_user = await User.objects.create(email=user.email, password=hashed_password, active=True)
+        new_user = await User.objects.create(firstName=user.firstName, lastName=user.lastName, city=user.city, email=user.email, password=hashed_password, active=True)
         return {"email": new_user.email, "active": new_user.active}
-    except UniqueColumnsViolationError:
+    except UniqueViolationError:
         # Cette exception est levée si l'email fourni est déjà utilisé
         raise HTTPException(status_code=400, detail="This email already exists")
 
 @app.post("/login", name='User login', tags=['Users','Login'])
-async def login(email: str, password: str):
-    user = await User.objects.get_or_none(email=email)
-    if user and pwd_context.verify(password, user.password):
+async def login(data: LoginData):
+    user = await User.objects.get_or_none(email=data.email)
+    if user and pwd_context.verify(data.password, user.password):
         return {"message": "User logged in successfully."}
     else:
         raise HTTPException(status_code=404, detail="User not found or password is incorrect")
@@ -86,7 +83,6 @@ async def startup():
         await database.connect()
     # # create a dummy entry
     # await User.objects.get_or_create(email="test@test.com")
-
 
 @app.on_event("shutdown")
 async def shutdown():
