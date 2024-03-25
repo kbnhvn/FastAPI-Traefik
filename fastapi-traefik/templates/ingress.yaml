@@ -16,7 +16,7 @@ spec:
       paths:
         # Path api web
         - path: /users
-          pathType: prefix
+          pathType: Prefix
           backend:
              service:
               name: web-service
