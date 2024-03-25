@@ -49,8 +49,11 @@ app = FastAPI(
 # --------- Routes GET --------- #
 
 @app.get("/", name='Get all users', tags=['Users'])
-async def read_root():
-    return await User.objects.all()
+async def getAllUsers():
+    users = await User.objects.all()
+    # Convertion en dictionnaire, puis retrait du mot de passe
+    users_data = [user.dict(exclude={"password"}) for user in users]
+    return users_data
 
 # --------- Routes POST --------- #
 
@@ -67,7 +70,7 @@ async def signup(user: UserSignup):
         # Cette exception est levée si l'email fourni est déjà utilisé
         raise HTTPException(status_code=400, detail="This email already exists")
 
-@app.get("/login", name='User login', tags=['Users','Login'])
+@app.post("/login", name='User login', tags=['Users','Login'])
 async def login(email: str, password: str):
     user = await User.objects.get_or_none(email=email)
     if user and pwd_context.verify(password, user.password):
