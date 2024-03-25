@@ -82,7 +82,7 @@ traefik:
   args:
     - "--log.level=DEBUG"
     - "--api.insecure=true"
-    - "--providers.kubernetesingress"
+    - "--providers.kubernetesingress=true"
     - "--entrypoints.web.Address=:80"
     - "--entrypoints.websecure.Address=:443"
   ports:
