@@ -15,7 +15,7 @@ spec:
     http:
       paths:
         # Path api web
-        - path: /
+        - path: /users
           pathType: Exact
           backend:
              service:
