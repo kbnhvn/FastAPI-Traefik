@@ -145,7 +145,7 @@ stages {
                 steps {
                     script {
                         sh '''
-                        curl localhost:8000
+                        curl localhost:8000/health
                         '''
                     }
                 }
@@ -154,7 +154,7 @@ stages {
                 steps {
                     script {
                         sh '''
-                        curl localhost:8001
+                        curl localhost:8001/health
                         '''
                     }
                 }
