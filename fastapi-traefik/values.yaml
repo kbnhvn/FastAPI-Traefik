@@ -135,19 +135,19 @@ dashboardService:
   name: traefik-dashboard-service
   type: LoadBalancer
   port: 8080
-  targetPort: dashboard
+  targetPort: 8080
 
 webService:
   name: traefik-web-service
   type: LoadBalancer
   port: 80
-  targetPort: web
+  targetPort: 80
 
 webSecureService:
   name: traefik-websecure-service
   type: LoadBalancer
   port: 443
-  targetPort: websecure
+  targetPort: 443
 
 ingress:
   host: fastapi-traefik.cours-datascientest-devops.cloudns.be
