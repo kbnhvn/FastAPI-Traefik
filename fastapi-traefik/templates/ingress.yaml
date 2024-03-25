@@ -22,6 +22,14 @@ spec:
               name: web-service
               port:
                 number: 8000
+        # Path api web docs
+        - path: /docs
+          pathType: Exact
+          backend:
+             service:
+              name: web-service
+              port:
+                number: 8000
         # Path pgAdmin
         - path: "{{ .Values.pgadmin.config.script_name }}"
           pathType: Prefix
