@@ -1,6 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from app.db import database, User
 from app.models import UserSignup, LoginData
+from app.oauth import create_access_token, get_current_user, get_current_role, forward_auth, oauth2_scheme
 
 # Utilisé pour la vérification de l'unicité de l'email
 from asyncpg.exceptions import UniqueViolationError
@@ -46,11 +47,16 @@ app = FastAPI(
 # --------- Routes GET --------- #
 
 @app.get("/users", name='Get all users', tags=['Users'])
-async def getAllUsers():
+async def getAllUsers(current_user: User = Depends(get_current_role)):
     users = await User.objects.all()
     # Convertion en dictionnaire, puis retrait du mot de passe
     users_data = [user.dict(exclude={"password"}) for user in users]
     return users_data
+
+# ROUTE FORWARD AUTH POUR TRAEFIK (vérification du token JWT et role)
+@app.get("/forward-auth")
+async def forward_auth_route(request: Request, token: str = Depends(oauth2_scheme)):
+    return await forward_auth(request, token)
 
 # --------- Routes POST --------- #
 
@@ -71,7 +77,8 @@ async def signup(user: UserSignup):
 async def login(data: LoginData):
     user = await User.objects.get_or_none(email=data.email)
     if user and pwd_context.verify(data.password, user.password):
-        return {"message": "User logged in successfully."}
+        access_token = create_access_token(data={"sub": user.email, "role": user.role})
+        return {"access_token": access_token, "token_type": "bearer"}
     else:
         raise HTTPException(status_code=404, detail="User not found or password is incorrect")
 
