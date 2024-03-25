@@ -90,6 +90,6 @@ async def shutdown():
     if database.is_connected:
         await database.disconnect()
 
-@api.get('/health', name='Health check', tags=['Tools'])
+@app.get('/health', name='Health check', tags=['Tools'])
 async def health_check():
     return {"status": "ok"}
