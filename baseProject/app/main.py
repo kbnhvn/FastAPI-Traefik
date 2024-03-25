@@ -45,7 +45,7 @@ app = FastAPI(
 
 # --------- Routes GET --------- #
 
-@app.get("/", name='Get all users', tags=['Users'])
+@app.get("/users", name='Get all users', tags=['Users'])
 async def getAllUsers():
     users = await User.objects.all()
     # Convertion en dictionnaire, puis retrait du mot de passe
