@@ -10,6 +10,7 @@ services:
       - 8000
     environment:
       - DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik
+      - SECRET_KEY=uZq3P4qWm8v6y$B+E(H@MbQeThVmYq3t6w9z$C&F)J@NcRfUjXn2r5u8x/A?D(G+
     depends_on:
       - db
     labels:

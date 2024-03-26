@@ -9,6 +9,7 @@ services:
       - 80
     environment:
       - DATABASE_URL=postgresql://fastapi_traefik_prod:fastapi_traefik_prod@db:5432/fastapi_traefik_prod
+      - SECRET_KEY=uZq3P4qWm8v6y$B+E(H@MbQeThVmYq3t6w9z$C&F)J@NcRfUjXn2r5u8x/A?D(G+
     depends_on:
       - db
     labels:
