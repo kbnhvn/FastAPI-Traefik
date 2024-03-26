@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgadmin
+spec:
+  selector:
+    matchLabels:
+      app: pgadmin
+  replicas: {{ .Values.pgadmin.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+    spec:
+      containers:
+      - name: pgadmin
+        image: {{ .Values.pgadmin.repository }}
+        env:
+        # Permet de gérer la route depuis l'ingress
+        - name: SCRIPT_NAME
+          value: {{ .Values.pgadmin.config.script_name }}
+        envFrom:
+          - secretRef:
+              name: "{{ .Values.pgadmin.credentials.secret_file }}"
+        ports:
+        - containerPort: 80

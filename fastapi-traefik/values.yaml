@@ -1,0 +1,154 @@
+# Default values for fastapi-traefik.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+namespace: ""
+
+data:
+  schedule: "15 14 * * *"     # A définir
+  repository: kbnhvn/datafetcher
+  tag: latest
+  index_name: qualite_air
+  external_api_url: https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/qualite-de-lair-france/records?limit=-1
+
+web:
+  replicaCount: 1
+  repository: kbnhvn/web-dev
+  tag: latest
+  command: ["bash", "-c"]
+  args: ["uvicorn app.main:app --host 0.0.0.0"]
+  containerPort: 8000
+  service:
+    type: ClusterIP
+    port: 8000
+    targetPort: 8000
+  config:
+    script_name: /api/admin
+
+db:
+  replicaCount: 1
+  repository: postgres
+  tag: 15-alpine
+  service:
+    type: ClusterIP
+  storage:
+    capacity: 10Gi
+  config:
+    db_name: fastapi_traefik
+  credentials:
+    secret_file: db-secret
+
+pgadmin:
+  replicaCount: 1
+  repository: dpage/pgadmin4
+  tag:
+  service:
+    type: ClusterIP
+    port: 8080
+  config:
+    script_name: /api/admin
+  credentials:
+    secret_file: pgadmin-secret
+
+kibana:
+  replicaCount: 1
+  repository: docker.elastic.co/kibana/kibana
+  tag: 7.5.2
+  service:
+    type: ClusterIP
+    port: 5601
+  config:
+    server_basepath: /api/kibana
+
+elasticsearch:
+  replicaCount: 1
+  repository: docker.elastic.co/elasticsearch/elasticsearch
+  tag: 7.5.2
+  service:
+    type: ClusterIP
+  storage:
+    capacity: 10Gi
+  config:
+    node_name: es
+    discovery_type: single-node
+
+traefik:
+  replicaCount: 1
+  image:
+    repository: traefik
+    tag: v2.9.6
+    pullPolicy: IfNotPresent
+  serviceAccountName: traefik-service-account
+  args:
+    - "--log.level=DEBUG"
+    - "--accesslog=true"
+    - "--api.insecure=true"
+    - "--providers.kubernetesingress=true"
+    - "--entrypoints.web.Address=:80"
+    - "--entrypoints.websecure.Address=:443"
+  ports:
+    web:
+      containerPort: 80
+    websecure:
+      containerPort: 443
+    dashboard:
+      containerPort: 8080
+
+role:
+  name: traefik-role
+  rules:
+    - apiGroups:
+        - ""
+      resources:
+        - services
+        - endpoints
+        - secrets
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - extensions
+        - networking.k8s.io
+      resources:
+        - ingresses
+        - ingressclasses
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - extensions
+        - networking.k8s.io
+      resources:
+        - ingresses/status
+      verbs:
+        - update
+
+serviceAccount:
+  name: traefik-service-account
+
+roleBinding:
+  name: traefik-role-binding
+
+dashboardService:
+  name: traefik-dashboard-service
+  type: LoadBalancer
+  port: 8080
+  targetPort: 8080
+
+webService:
+  name: traefik-web-service
+  type: LoadBalancer
+  port: 80
+  targetPort: 80
+
+webSecureService:
+  name: traefik-websecure-service
+  type: LoadBalancer
+  port: 443
+  targetPort: 443
+
+ingress:
+  host: fastapi-traefik.cours-datascientest-devops.cloudns.be
+

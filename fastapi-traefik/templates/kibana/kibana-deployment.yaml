@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+spec:
+  selector:
+    matchLabels:
+      app: kibana
+  replicas: {{ .Values.kibana.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+      - name: kibana
+        image: {{ .Values.kibana.repository }}:{{ .Values.kibana.tag }}
+        env:
+          - name: ELASTICSEARCH_HOSTS
+            value: "http://elasticsearch-service.{{ .Values.namespace }}.svc.cluster.local:9200"
+          # Ces ENV permettent de gérer le path d'accès à Kibana (via l'ingress)
+          - name: SERVER_BASEPATH
+            value: "{{ .Values.kibana.config.server_basepath }}"
+          - name: SERVER_REWRITEBASEPATH
+            value: "true"
+        ports:
+        - containerPort: 5601

@@ -3,6 +3,18 @@
 ## Cahier des charges :
 https://1drv.ms/w/s!ArK3W0SU4bw29gz5Em1yGjNG07H8?e=N2dZ83
 
+## Images Docker
+
+### Images créées à partir du projet initial :
+- kbnhvn/web-dev : https://hub.docker.com/r/kbnhvn/web-dev
+- kbnhvn/web-prod : https://hub.docker.com/r/kbnhvn/web-prod
+
+### Image créée pour récupérer les données :
+- kbnhvn/datafetcher : https://hub.docker.com/r/kbnhvn/datafetcher
+
+Env :
+DATABASE_URL=postgresql://```user```:```password```@```host```:5432/```db```
+
 ## Serveur :
 Le cluster k3s et jenkins tournent sur un EC2 AWS.
 
@@ -57,4 +69,6 @@ Cliquer ensuite sur **Open pull request**
 ### Règles de nommage des fichiers
 Pour les manifests yaml :
 - ```micro service```-```ressource``` par exemple web-service ou db-secret
+
+
 

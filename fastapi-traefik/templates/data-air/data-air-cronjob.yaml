@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: datafetcher-cronjob
+spec:
+  schedule: "{{ .Values.data.schedule }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: datafetcher
+            image:  "{{ .Values.data.repository }}:{{ .Values.data.tag }}"
+            env:
+            - name: DATABASE_URL
+              value: "elasticsearch-service.{{ .Values.namespace }}.svc.cluster.local"
+            - name: INDEX_NAME
+              value: "{{ .Values.data.index_name }}"
+            - name: EXTERNAL_API_URL
+              value: "{{ .Values.data.external_api_url }}"
+          restartPolicy: OnFailure
