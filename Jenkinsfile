@@ -220,6 +220,7 @@ stage('Deploiement en dev'){
         KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
         FULL_REPOSITORY = "${env.DOCKER_ID}/${env.DOCKER_IMAGE_WEB_DEV}"
         NAMESPACE = "dev"
+        ROLE_NAME = "traefik-role-dev"
         }
         when 
         {
@@ -252,7 +253,7 @@ stage('Deploiement en dev'){
                 yq eval ".ingress.host = strenv(DEV_HOSTNAME)" -i values.yml
 
                 # Modification du ClusterRole name
-                yq eval ".role.name = traefik-role-dev" -i values.yml
+                yq eval ".role.name = strenv(ROLE_NAME)" -i values.yml
 
                 helm upgrade --install app fastapi-traefik --values=values.yml --namespace $NAMESPACE
                 '''
@@ -266,6 +267,7 @@ stage('Deploiement en prod'){
         KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
         FULL_REPOSITORY = "${env.DOCKER_ID}/${env.DOCKER_IMAGE_WEB_PROD}"
         NAMESPACE = "prod"
+        ROLE_NAME = "traefik-role-prod"
         }
         when 
         {
@@ -304,7 +306,7 @@ stage('Deploiement en prod'){
                 yq eval ".ingress.host = strenv(PROD_HOSTNAME)" -i values.yml
 
                 # Modification du ClusterRole name
-                yq eval ".role.name = traefik-role-prod" -i values.yml
+                yq eval ".role.name = strenv(ROLE_NAME)" -i values.yml
 
                 # ------ Modifications relatives aux ENV de l'image PROD uniquement ----
                 sed -i "/command/d" values.yml
