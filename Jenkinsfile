@@ -206,6 +206,7 @@ stages {
 
 stage('Check branch'){
     steps {
+        env.BRANCH_NAME = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim()
         echo "Branche actuelle: ${env.BRANCH_NAME}"
     }
 }
