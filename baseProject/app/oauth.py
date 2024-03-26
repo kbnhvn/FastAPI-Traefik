@@ -2,7 +2,7 @@ import jwt
 import os
 import datetime
 from fastapi.security import OAuth2PasswordBearer
-from fastapi import Depends, Request
+from fastapi import Depends, Request, HTTPException
 
 # Permet la creation de token JWT lors du login de l'user
 
