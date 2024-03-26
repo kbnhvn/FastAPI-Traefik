@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: pgadmin-ingressroute
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+  - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`{{ .Values.pgadmin.config.script_name }}`)
+    kind: Rule
+    services:
+    - name: pgadmin-service
+      port: 8080
+    middlewares:
+      - name: traefik-auth-middleware

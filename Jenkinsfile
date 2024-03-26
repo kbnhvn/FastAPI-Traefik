@@ -8,6 +8,11 @@ EXTERNAL_API_URL = "https://public.opendatasoft.com/api/explore/v2.1/catalog/dat
 DEV_HOSTNAME = "dev.fastapi-traefik.cloudns.ch"
 PROD_HOSTNAME = "prod.fastapi-traefik.cloudns.ch"
 DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
+
+// SECRETS
+SECRET_KEY = credentials("SECRET_KEY")
+PGADMIN_CREDENTIALS = credentials("PGADMIN_CREDENTIALS")
+DB_CREDENTIALS = credentials("DB_CREDENTIALS")
 }
 agent any // Jenkins will be able to select all available agents
 stages {
@@ -257,6 +262,13 @@ stage('Deploiement en dev'){
                 yq eval ".role.name = strenv(ROLE_NAME)" -i values.yml
                 yq eval ".roleBinding.name = strenv(ROLE_BINDING_NAME)" -i values.yml
 
+                #Ajout des secrets
+                yq eval ".secrets.web.secret_key = strenv(SECRET_KEY)" -i values.yml
+                yq eval ".secrets.pgadmin.email = strenv(PGADMIN_CREDENTIALS_USR)" -i values.yml
+                yq eval ".secrets.pgadmin.password = strenv(PGADMIN_CREDENTIALS_PSW)" -i values.yml
+                yq eval ".secrets.db.user = strenv(DB_CREDENTIALS_USR)" -i values.yml
+                yq eval ".secrets.db.password = strenv(DB_CREDENTIALS_PSW)" -i values.yml
+
                 helm upgrade --install app fastapi-traefik --values=values.yml --namespace $NAMESPACE
                 '''
                 }
@@ -311,6 +323,13 @@ stage('Deploiement en prod'){
                 # Modification du ClusterRole name
                 yq eval ".role.name = strenv(ROLE_NAME)" -i values.yml
                 yq eval ".roleBinding.name = strenv(ROLE_BINDING_NAME)" -i values.yml
+
+                #Ajout des secrets
+                yq eval ".secrets.web.secret_key = strenv(SECRET_KEY)" -i values.yml
+                yq eval ".secrets.pgadmin.email = strenv(PGADMIN_CREDENTIALS_USR)" -i values.yml
+                yq eval ".secrets.pgadmin.password = strenv(PGADMIN_CREDENTIALS_PSW)" -i values.yml
+                yq eval ".secrets.db.user = strenv(DB_CREDENTIALS_USR)" -i values.yml
+                yq eval ".secrets.db.password = strenv(DB_CREDENTIALS_PSW)" -i values.yml
 
                 # ------ Modifications relatives aux ENV de l'image PROD uniquement ----
                 sed -i "/command/d" values.yml

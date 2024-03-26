@@ -83,7 +83,7 @@ traefik:
     - "--log.level=DEBUG"
     - "--accesslog=true"
     - "--api.insecure=true"
-    - "--providers.kubernetesingress=true"
+    - "--providers.kubernetescrd=true"
     - "--entrypoints.web.Address=:80"
     - "--entrypoints.websecure.Address=:443"
   ports:
@@ -124,6 +124,21 @@ role:
         - ingresses/status
       verbs:
         - update
+    - apiGroups:
+        - traefik.containo.us
+      resources:
+        - middlewares
+        - ingressroutes
+        - tlsstores
+        - tlsOptions
+        - ingressroutetcps
+        - ingressrouteudps
+        - serverstransports
+        - traefikservices
+      verbs:
+        - get
+        - list
+        - watch
 
 serviceAccount:
   name: traefik-service-account
@@ -151,4 +166,15 @@ webSecureService:
 
 ingress:
   host: fastapi-traefik.cours-datascientest-devops.cloudns.be
+
+# Les secrets sont stockés dans les credentials Jenkins et sont envoyés via le pipeline
+secrets:
+  web:
+    secret_key: ""
+  pgadmin:
+    email: ""
+    password: ""
+  db:
+    user: ""
+    password: ""
 
