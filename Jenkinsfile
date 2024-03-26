@@ -205,15 +205,15 @@ stages {
     }
 
 stage('Deploiement en dev'){
-        // when 
-        //{
-        //branch 'develop' // Cette condition s'assure que le stage ne s'exécute que sur la branche develop
-        //}
         environment
         {
         KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
         FULL_REPOSITORY = "${env.DOCKER_ID}/${env.DOCKER_IMAGE_WEB_DEV}"
         NAMESPACE = "dev"
+        }
+        when 
+        {
+            branch "develop" // Cette condition s'assure que le stage ne s'exécute que sur la branche develop
         }
             steps {
                 script {
@@ -248,15 +248,15 @@ stage('Deploiement en dev'){
 
         }
 stage('Deploiement en prod'){
-        when 
-        {
-        branch 'master' // Cette condition s'assure que le stage ne s'exécute que sur la branche master
-        }
         environment
         {
         KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
         FULL_REPOSITORY = "${env.DOCKER_ID}/${env.DOCKER_IMAGE_WEB_PROD}"
         NAMESPACE = "prod"
+        }
+        when 
+        {
+            branch "master" // Cette condition s'assure que le stage ne s'exécute que sur la branche master
         }
             steps {
             // Create an Approval Button with a timeout of 15minutes.
