@@ -12,5 +12,5 @@ spec:
       services:
       - name: api@internal
         kind: TraefikService
-      middlewares:
-        - name: traefik-auth-middleware
+      # middlewares:
+      #   - name: traefik-auth-middleware
