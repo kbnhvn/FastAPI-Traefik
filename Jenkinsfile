@@ -221,6 +221,7 @@ stage('Deploiement en dev'){
         FULL_REPOSITORY = "${env.DOCKER_ID}/${env.DOCKER_IMAGE_WEB_DEV}"
         NAMESPACE = "dev"
         ROLE_NAME = "traefik-role-dev"
+        ROLE_BINDING_NAME = "traefik-role-binding-dev"
         }
         when 
         {
@@ -254,6 +255,7 @@ stage('Deploiement en dev'){
 
                 # Modification du ClusterRole name
                 yq eval ".role.name = strenv(ROLE_NAME)" -i values.yml
+                yq eval ".roleBinding.name = strenv(ROLE_BINDING_NAME)" -i values.yml
 
                 helm upgrade --install app fastapi-traefik --values=values.yml --namespace $NAMESPACE
                 '''
@@ -268,6 +270,7 @@ stage('Deploiement en prod'){
         FULL_REPOSITORY = "${env.DOCKER_ID}/${env.DOCKER_IMAGE_WEB_PROD}"
         NAMESPACE = "prod"
         ROLE_NAME = "traefik-role-prod"
+        ROLE_BINDING_NAME = "traefik-role-binding-prod"
         }
         when 
         {
@@ -307,6 +310,7 @@ stage('Deploiement en prod'){
 
                 # Modification du ClusterRole name
                 yq eval ".role.name = strenv(ROLE_NAME)" -i values.yml
+                yq eval ".roleBinding.name = strenv(ROLE_BINDING_NAME)" -i values.yml
 
                 # ------ Modifications relatives aux ENV de l'image PROD uniquement ----
                 sed -i "/command/d" values.yml
