@@ -205,6 +205,9 @@ stages {
     }
 
 stage('Deploiement en dev'){
+        steps {
+        echo "Branche actuelle: ${env.BRANCH_NAME}"
+        }
         environment
         {
         KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
