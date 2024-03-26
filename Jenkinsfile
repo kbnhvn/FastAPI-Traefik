@@ -207,7 +207,7 @@ stages {
 stage('Check branch'){
     steps {
         script {
-            def branchName = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+            def branchName = sh(script: "git branch -a --contains HEAD | grep 'remotes/origin' | sed 's|remotes/origin/||' | head -n 1", returnStdout: true).trim()
             env.BRANCH_NAME = branchName
             echo "Branche actuelle: ${env.BRANCH_NAME}"
         }
