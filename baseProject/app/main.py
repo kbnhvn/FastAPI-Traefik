@@ -1,7 +1,8 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Request
 from app.db import database, User
-from app.models import UserSignup, LoginData
-from app.oauth import create_access_token, get_current_user, get_current_role, forward_auth, oauth2_scheme
+from app.models import UserSignup
+from fastapi.security import OAuth2PasswordRequestForm
+from app.oauth import create_access_token, get_current_role, forward_auth, oauth2_scheme
 
 # Utilisé pour la vérification de l'unicité de l'email
 from asyncpg.exceptions import UniqueViolationError
@@ -25,9 +26,15 @@ description= """
 ## Features
 
 ### Users
+- Signup : create new user, verify if email already exists)
+- Login : Verify if mail/password exists and create JWT token
+
+### Admin
 - Get all users
-- Signup (create new user, verify if email already exists)
-- Login (Verify if mail/password exists)
+
+### Forward Auth
+- This app can be used to forward auth with Traefic with route ```/forward-auth```
+- Can validate both user and role
 
 #### Tools
 - Check the health and functionality of the API
@@ -47,14 +54,16 @@ app = FastAPI(
 # --------- Routes GET --------- #
 
 @app.get("/users", name='Get all users', tags=['Users'])
-async def getAllUsers(current_user: User = Depends(get_current_role)):
+async def getAllUsers(admin_auth: bool = Depends(get_current_role)):
+    if not admin_auth:
+        raise HTTPException(status_code=403, detail="Access denied")
     users = await User.objects.all()
     # Convertion en dictionnaire, puis retrait du mot de passe
     users_data = [user.dict(exclude={"password"}) for user in users]
     return users_data
 
 # ROUTE FORWARD AUTH POUR TRAEFIK (vérification du token JWT et role)
-@app.get("/forward-auth")
+@app.get("/forward-auth", name='Forward Auth', tags=['OAuth'])
 async def forward_auth_route(request: Request, token: str = Depends(oauth2_scheme)):
     return await forward_auth(request, token)
 
@@ -67,16 +76,16 @@ async def signup(user: UserSignup):
         raise HTTPException(status_code=422, detail="Password must have at least 8 characters")
     try:
         hashed_password = pwd_context.hash(user.password)
-        new_user = await User.objects.create(firstName=user.firstName, lastName=user.lastName, city=user.city, email=user.email, password=hashed_password, active=True)
+        new_user = await User.objects.create(firstName=user.firstName, lastName=user.lastName, city=user.city, email=user.email, password=hashed_password, active=True, role=user.role)
         return {"email": new_user.email, "active": new_user.active}
     except UniqueViolationError:
         # Cette exception est levée si l'email fourni est déjà utilisé
         raise HTTPException(status_code=400, detail="This email already exists")
 
 @app.post("/login", name='User login', tags=['Users','Login'])
-async def login(data: LoginData):
-    user = await User.objects.get_or_none(email=data.email)
-    if user and pwd_context.verify(data.password, user.password):
+async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = await User.objects.get_or_none(email=form_data.username)
+    if user and pwd_context.verify(form_data.password, user.password):
         access_token = create_access_token(data={"sub": user.email, "role": user.role})
         return {"access_token": access_token, "token_type": "bearer"}
     else:

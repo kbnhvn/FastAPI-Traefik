@@ -8,7 +8,4 @@ class UserSignup(BaseModel):
     email: EmailStr
     password: str
     city: str
-
-class LoginData(BaseModel):
-    email: str
-    password: str
+    role: str = "user"

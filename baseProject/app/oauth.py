@@ -1,8 +1,9 @@
 import jwt
 import os
 import datetime
+from app.db import User
 from fastapi.security import OAuth2PasswordBearer
-from fastapi import Depends, Request, HTTPException
+from fastapi import Depends, HTTPException
 
 # Permet la creation de token JWT lors du login de l'user
 
@@ -12,27 +13,16 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 def create_access_token(data: dict):
     to_encode = data.copy()
-    expire = datetime.datetime.utcnow() + datetime.timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire, "role": data.get("role", "user")})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
 # Permet de vérifier et valider le token
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
-            raise HTTPException(status_code=400, detail="Email not found")
-        user = await User.objects.get_or_none(email=email)
-        if user is None:
-            raise HTTPException(status_code=404, detail="User not found")
-    except jwt.PyJWTError:
-        raise HTTPException(status_code=401, detail="Token is not valid")
-    return user
+# Permet de vérifier le role dans le token
 
 async def get_current_role(token: str = Depends(oauth2_scheme)):
     try:
