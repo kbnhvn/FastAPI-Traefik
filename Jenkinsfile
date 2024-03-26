@@ -251,6 +251,9 @@ stage('Deploiement en dev'){
                 # Modification du ingress host
                 yq eval ".ingress.host = strenv(DEV_HOSTNAME)" -i values.yml
 
+                # Modification du ClusterRole name
+                yq eval ".role.name = traefik-role-dev" -i values.yml
+
                 helm upgrade --install app fastapi-traefik --values=values.yml --namespace $NAMESPACE
                 '''
                 }
@@ -299,6 +302,9 @@ stage('Deploiement en prod'){
 
                 # Modification du ingress host
                 yq eval ".ingress.host = strenv(PROD_HOSTNAME)" -i values.yml
+
+                # Modification du ClusterRole name
+                yq eval ".role.name = traefik-role-prod" -i values.yml
 
                 # ------ Modifications relatives aux ENV de l'image PROD uniquement ----
                 sed -i "/command/d" values.yml
