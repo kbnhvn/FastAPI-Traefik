@@ -22,6 +22,11 @@ spec:
     services:
     - name: web-service
       port: {{ .Values.web.service.port }}
+  - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/forward-auth`)
+    kind: Rule
+    services:
+    - name: web-service
+      port: {{ .Values.web.service.port }}
   - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/signup`)
     kind: Rule
     services:
