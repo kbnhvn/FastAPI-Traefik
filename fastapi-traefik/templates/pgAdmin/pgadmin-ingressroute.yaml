@@ -11,6 +11,6 @@ spec:
     kind: Rule
     services:
     - name: pgadmin-service
-      port: 8080
+      port: {{ .Values.pgadmin.service.port }}
     middlewares:
       - name: traefik-auth-middleware

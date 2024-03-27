@@ -11,9 +11,9 @@ spec:
     kind: Rule
     services:
     - name: nginx-service
-      port: 8000
+      port: {{ .Values.nginx.service.port }}
   - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/login.html`)
     kind: Rule
     services:
     - name: nginx-service
-      port: 8000
+      port: {{ .Values.nginx.service.port }}
