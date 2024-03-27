@@ -8,5 +8,5 @@ spec:
   type: {{ .Values.nginx.service.type }}
   ports:
     - protocol: TCP
-      port: {{ .Values.nginx.service.type }}
+      port: {{ .Values.nginx.service.port }}
       targetPort: 80
