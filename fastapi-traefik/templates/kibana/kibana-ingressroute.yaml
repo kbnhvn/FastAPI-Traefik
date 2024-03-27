@@ -11,6 +11,6 @@ spec:
     kind: Rule
     services:
     - name: kibana-service
-      port: 5601
+      port: {{ .Values.kibana.service.port }}
     middlewares:
       - name: traefik-auth-middleware
