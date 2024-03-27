@@ -64,4 +64,4 @@ async def forward_auth(request: Request):
             raise HTTPException(status_code=403, detail="Admin role required")
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Token is not valid")
-    return {"status": "Authorized"}
+    return Response(status_code=200)
