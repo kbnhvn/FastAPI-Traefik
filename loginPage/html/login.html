@@ -24,7 +24,7 @@
             formData.append('password', password);
 
             // Fetch permet le passage de header
-            const response = await fetch('http://fastapi.localhost:8008/login', {
+            const response = await fetch('/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData.toString()
