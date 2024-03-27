@@ -1,6 +1,6 @@
 import jwt
 import os
-import datetime
+from datetime import datetime, timedelta
 from app.db import User
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, Request
@@ -13,7 +13,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 def create_access_token(data: dict):
     to_encode = data.copy()
-    expire = datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire, "role": data.get("role", "user")})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
