@@ -18,11 +18,16 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
+            // Prépare les données sous forme de données de formulaire encodées en URL
+            const formData = new URLSearchParams();
+            formData.append('username', email);
+            formData.append('password', password);
+
             // Fetch permet le passage de header
-            const response = await fetch('/login', { 
+            const response = await fetch('http://fastapi.localhost:8008/login', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
             });
 
             if (response.ok) {
