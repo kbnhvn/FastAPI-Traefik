@@ -57,7 +57,7 @@ stages {
                     script {
                         sh '''
                         docker rm -f $DOCKER_IMAGE_WEBSERVER || true
-                        docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEBSERVER:$DOCKER_TAG -f ./loginPage
+                        docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEBSERVER:$DOCKER_TAG ./loginPage
                         sleep 6
                         '''
                     }
