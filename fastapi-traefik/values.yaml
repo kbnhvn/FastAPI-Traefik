@@ -5,7 +5,7 @@
 namespace: ""
 
 data:
-  schedule: "15 14 * * *"     # A définir
+  schedule: "0 0 */2 * *"     # Un jour ,sur deux a minuit
   repository: kbnhvn/datafetcher
   tag: latest
   index_name: qualite_air
