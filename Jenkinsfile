@@ -293,6 +293,7 @@ stage('Deploiement en dev'){
                 # Modification des tags
                 yq eval ".web.tag = strenv(DOCKER_TAG)" -i values.yml
                 yq eval ".data.tag = strenv(DOCKER_TAG)" -i values.yml
+                yq eval ".nginx.tag = strenv(DOCKER_TAG)" -i values.yml
 
                 # Modification du repository pour l'image web
                 yq eval ".web.repository = strenv(FULL_REPOSITORY)" -i values.yml
@@ -355,6 +356,7 @@ stage('Deploiement en prod'){
                 # Modification des tags
                 yq eval ".web.tag = strenv(DOCKER_TAG)" -i values.yml
                 yq eval ".data.tag = strenv(DOCKER_TAG)" -i values.yml
+                yq eval ".nginx.tag = strenv(DOCKER_TAG)" -i values.yml
 
                 # Modification du repository pour l'image web
                 yq eval ".web.repository = strenv(FULL_REPOSITORY)" -i values.yml
