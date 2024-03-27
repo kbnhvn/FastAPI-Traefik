@@ -89,7 +89,7 @@ async def login(response: Response, form_data: OAuth2PasswordRequestForm = Depen
         # Création du token JWT
         access_token = create_access_token(data={"sub": user.email, "role": user.role})
         # Création du cookie HTTPOnly
-        response.set_cookie(key="auth_token", value=f"Bearer {access_token}", httponly=True, max_age=1800)  # 1800 secondes = 30 minutes
+        response.set_cookie(key="auth_token", value=access_token, httponly=True, max_age=1800)  # 1800 secondes = 30 minutes
         return {"message": "Login successful", "access_token": access_token, "token_type": "bearer"}
     else:
         raise HTTPException(status_code=404, detail="User not found or password is incorrect")
