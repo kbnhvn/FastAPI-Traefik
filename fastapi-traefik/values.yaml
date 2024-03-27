@@ -72,6 +72,14 @@ elasticsearch:
     node_name: es
     discovery_type: single-node
 
+nginx:
+  replicaCount: 1
+  repository: kbnhvn/webserver
+  tag: v.0.0.1
+  service:
+    type: ClusterIP
+    port: 8000
+
 traefik:
   replicaCount: 1
   image:
