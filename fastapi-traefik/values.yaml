@@ -152,6 +152,8 @@ role:
         - ingressrouteudps
         - serverstransports
         - traefikservices
+        - middlewaretcps
+        - tlsoptions
       verbs:
         - get
         - list
