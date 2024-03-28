@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Depends, Request, Response
 from app.db import database, User
 from app.models import UserSignup
 from fastapi.security import OAuth2PasswordRequestForm
-from app.oauth import create_access_token, get_current_role, forward_auth, oauth2_scheme
+from app.oauth import create_access_token, get_user_authenticated
 
 # Utilisé pour la vérification de l'unicité de l'email
 from asyncpg.exceptions import UniqueViolationError
@@ -54,9 +54,11 @@ app = FastAPI(
 # --------- Routes GET --------- #
 
 @app.get("/users", name='Get all users', tags=['Users'])
-async def getAllUsers(admin_auth: bool = Depends(get_current_role)):
-    if not admin_auth:
-        raise HTTPException(status_code=403, detail="Access denied")
+async def getAllUsers(payload: dict = Depends(get_user_authenticated)):
+    # Le payload contient les informations du token décodé
+    role = payload.get("role", "")
+    if role != "admin":
+        return Response(status_code=403, content="Access denied")
     users = await User.objects.all()
     # Convertion en dictionnaire, puis retrait du mot de passe
     users_data = [user.dict(exclude={"password"}) for user in users]
@@ -64,8 +66,14 @@ async def getAllUsers(admin_auth: bool = Depends(get_current_role)):
 
 # ROUTE FORWARD AUTH POUR TRAEFIK (vérification du token JWT et role)
 @app.get("/forward-auth", name='Forward Auth', tags=['OAuth'])
-async def forward_auth_route(request: Request, token: str = Depends(oauth2_scheme)):
-    return await forward_auth(request)
+async def forward_auth_route(request: Request, payload: dict = Depends(get_user_authenticated)):
+    # Le payload contient les informations du token décodé
+    role = payload.get("role", "")
+    if "/admin" in request.url.path and role != "admin":
+        return Response(status_code=403, content="Access denied")
+
+    # Si l'utilisateur est authentifié et autorisé, continuez
+    return Response(status_code=200)
 
 # --------- Routes POST --------- #
 
