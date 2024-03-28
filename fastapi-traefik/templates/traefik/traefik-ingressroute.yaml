@@ -11,7 +11,8 @@ spec:
       kind: Rule
       services:
       - name: api@internal
-        port: 8080
-        kind: TraefikService
+      kind: TraefikService
+    middlewares:
+    - name: dashboard-stripprefix
       # middlewares:
       #   - name: traefik-auth-middleware
