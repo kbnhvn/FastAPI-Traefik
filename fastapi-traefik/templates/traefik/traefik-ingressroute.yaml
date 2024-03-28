@@ -10,7 +10,8 @@ spec:
     - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/admin/dashboard`)
       kind: Rule
       services:
-      - kind: TraefikService
-        name: api@internal
+      - name: traefik-dashboard-service
+        port: 8080
+        # kind: TraefikService
       # middlewares:
       #   - name: traefik-auth-middleware
