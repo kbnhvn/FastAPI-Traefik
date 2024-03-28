@@ -132,7 +132,7 @@ stages {
                 steps {
                     script {
                         sh '''
-                        docker run -d -p 8006:80 --name $DOCKER_IMAGE_WEB_PROD --network pg_network\
+                        docker run -d -p 8006:80 --name $DOCKER_IMAGE_WEB_PROD --network pg_network \
                         -e DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik \
                         $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG
                         sleep 10
