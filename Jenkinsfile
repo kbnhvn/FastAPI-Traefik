@@ -4,6 +4,7 @@ DOCKER_ID = "kbnhvn" // replace this with your docker-id
 DOCKER_IMAGE_DATA = "datafetcher"
 DOCKER_IMAGE_WEB_DEV = "web-dev"
 DOCKER_IMAGE_WEB_PROD = "web-prod"
+DOCKER_IMAGE_WEBSERVER = "webserver"
 EXTERNAL_API_URL = "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/qualite-de-lair-france/records?limit=-1"
 DEV_HOSTNAME = "dev.fastapi-traefik.cloudns.ch"
 PROD_HOSTNAME = "prod.fastapi-traefik.cloudns.ch"
@@ -46,6 +47,17 @@ stages {
                         sh '''
                         docker rm -f $DOCKER_IMAGE_WEB_PROD || true
                         docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG -f ./baseProject/Dockerfile.prod ./baseProject
+                        sleep 6
+                        '''
+                    }
+                }
+            }
+            stage(' Build webserver Image') {
+                steps {
+                    script {
+                        sh '''
+                        docker rm -f $DOCKER_IMAGE_WEBSERVER || true
+                        docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEBSERVER:$DOCKER_TAG ./loginPage
                         sleep 6
                         '''
                     }
@@ -128,6 +140,17 @@ stages {
                     }
                 }
             }
+            stage(' Run webserver Container') {
+                steps {
+                    script {
+                        sh '''
+                        docker run -d -p 8003:80 --name $DOCKER_IMAGE_WEBSERVER \
+                        $DOCKER_ID/$DOCKER_IMAGE_WEBSERVER:$DOCKER_TAG
+                        sleep 10
+                        '''
+                    }
+                }
+            }
 
         }
     }
@@ -160,6 +183,15 @@ stages {
                     script {
                         sh '''
                         curl localhost:8001/health
+                        '''
+                    }
+                }
+            }
+            stage(' Test webserver Container') {
+                steps {
+                    script {
+                        sh '''
+                        curl localhost:8003/
                         '''
                     }
                 }
@@ -200,6 +232,16 @@ stages {
                         sh '''
                         docker login -u $DOCKER_ID -p $DOCKER_PASS
                         docker push $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG
+                        '''
+                    }
+                }
+            }
+            stage(' Push webserver Image') {
+                steps {
+                    script {
+                        sh '''
+                        docker login -u $DOCKER_ID -p $DOCKER_PASS
+                        docker push $DOCKER_ID/$DOCKER_IMAGE_WEBSERVER:$DOCKER_TAG
                         '''
                     }
                 }
@@ -251,6 +293,7 @@ stage('Deploiement en dev'){
                 # Modification des tags
                 yq eval ".web.tag = strenv(DOCKER_TAG)" -i values.yml
                 yq eval ".data.tag = strenv(DOCKER_TAG)" -i values.yml
+                yq eval ".nginx.tag = strenv(DOCKER_TAG)" -i values.yml
 
                 # Modification du repository pour l'image web
                 yq eval ".web.repository = strenv(FULL_REPOSITORY)" -i values.yml
@@ -313,6 +356,7 @@ stage('Deploiement en prod'){
                 # Modification des tags
                 yq eval ".web.tag = strenv(DOCKER_TAG)" -i values.yml
                 yq eval ".data.tag = strenv(DOCKER_TAG)" -i values.yml
+                yq eval ".nginx.tag = strenv(DOCKER_TAG)" -i values.yml
 
                 # Modification du repository pour l'image web
                 yq eval ".web.repository = strenv(FULL_REPOSITORY)" -i values.yml

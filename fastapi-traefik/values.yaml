@@ -5,7 +5,7 @@
 namespace: ""
 
 data:
-  schedule: "15 14 * * *"     # A définir
+  schedule: "0 0 */2 * *"     # Un jour ,sur deux a minuit
   repository: kbnhvn/datafetcher
   tag: latest
   index_name: qualite_air
@@ -71,6 +71,14 @@ elasticsearch:
   config:
     node_name: es
     discovery_type: single-node
+
+nginx:
+  replicaCount: 1
+  repository: kbnhvn/webserver
+  tag: v.0.0.1
+  service:
+    type: ClusterIP
+    port: 8000
 
 traefik:
   replicaCount: 1

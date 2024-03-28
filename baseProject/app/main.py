@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, Request
+from fastapi import FastAPI, HTTPException, Depends, Request, Response
 from app.db import database, User
 from app.models import UserSignup
 from fastapi.security import OAuth2PasswordRequestForm
@@ -65,7 +65,7 @@ async def getAllUsers(admin_auth: bool = Depends(get_current_role)):
 # ROUTE FORWARD AUTH POUR TRAEFIK (vérification du token JWT et role)
 @app.get("/forward-auth", name='Forward Auth', tags=['OAuth'])
 async def forward_auth_route(request: Request, token: str = Depends(oauth2_scheme)):
-    return await forward_auth(request, token)
+    return await forward_auth(request)
 
 # --------- Routes POST --------- #
 
@@ -83,11 +83,14 @@ async def signup(user: UserSignup):
         raise HTTPException(status_code=400, detail="This email already exists")
 
 @app.post("/login", name='User login', tags=['Users','Login'])
-async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
     user = await User.objects.get_or_none(email=form_data.username)
     if user and pwd_context.verify(form_data.password, user.password):
+        # Création du token JWT
         access_token = create_access_token(data={"sub": user.email, "role": user.role})
-        return {"access_token": access_token, "token_type": "bearer"}
+        # Création du cookie HTTPOnly
+        response.set_cookie(key="auth_token", value=access_token, httponly=True, max_age=1800)  # 1800 secondes = 30 minutes
+        return {"message": "Login successful", "access_token": access_token, "token_type": "bearer"}
     else:
         raise HTTPException(status_code=404, detail="User not found or password is incorrect")
 

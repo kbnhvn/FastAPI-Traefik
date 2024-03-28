@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: datafetcher-cronjob
 spec:
-  schedule: "13 12 * * *" # Un jour sur deux à minuit
+  schedule: "0 0 */2 * *" # Un jour sur deux à minuit
   jobTemplate:
     spec:
       template:
