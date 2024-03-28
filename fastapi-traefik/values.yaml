@@ -103,6 +103,10 @@ traefik:
     - "--providers.kubernetescrd=true"
     - "--entrypoints.web.Address=:80"
     - "--entrypoints.websecure.Address=:443"
+    # Pour HTTPS
+    - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+    - "--certificatesresolvers.letsencrypt.acme.email=joel.lourenco.pro@gmail.com"
+    - "--certificatesresolvers.letsencrypt.acme.storage=/acme.json"
   ports:
     web:
       containerPort: 80

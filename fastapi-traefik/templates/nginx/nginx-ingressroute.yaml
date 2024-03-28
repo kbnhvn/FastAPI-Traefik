@@ -17,3 +17,5 @@ spec:
     services:
     - name: nginx-service
       port: {{ .Values.nginx.service.port }}
+  tls:
+    certResolver: letsencrypt

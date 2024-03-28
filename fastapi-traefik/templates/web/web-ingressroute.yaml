@@ -44,3 +44,5 @@ spec:
     services:
     - name: web-service
       port: {{ .Values.web.service.port }}
+  tls:
+    certResolver: letsencrypt
