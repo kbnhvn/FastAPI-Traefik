@@ -1,0 +1,12 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: kibana-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: kibana-deployment
+  minReplicas: {{ .Values.kibana.hpa.minReplicas }}
+  maxReplicas: {{ .Values.kibana.hpa.maxReplicas }}
+  targetCPUUtilizationPercentage: {{ .Values.kibana.hpa.targetCPUUtilizationPercentage }}

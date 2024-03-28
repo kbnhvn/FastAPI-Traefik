@@ -59,6 +59,10 @@ kibana:
     port: 5601
   config:
     server_basepath: /api/kibana
+  hpa:
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
 
 elasticsearch:
   replicaCount: 1
@@ -186,3 +190,12 @@ secrets:
     user: ""
     password: ""
 
+hpatraefik:
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+
+hpaweb:
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
