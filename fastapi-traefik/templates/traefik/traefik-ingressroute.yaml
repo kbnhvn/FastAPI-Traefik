@@ -14,7 +14,8 @@ spec:
         kind: TraefikService
       middlewares:
       - name: dashboard-stripprefix
-      middlewares:
-        - name: traefik-auth-middleware
+      - name: traefik-auth-middleware
+      - name: https-redirect
+      
   tls:
     certResolver: letsencrypt

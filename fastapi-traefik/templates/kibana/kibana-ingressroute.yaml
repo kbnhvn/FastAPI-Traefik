@@ -14,5 +14,6 @@ spec:
       port: {{ .Values.kibana.service.port }}
     middlewares:
       - name: traefik-auth-middleware
+      - name: https-redirect
   tls:
     certResolver: letsencrypt
