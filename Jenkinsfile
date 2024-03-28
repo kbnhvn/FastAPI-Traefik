@@ -119,7 +119,7 @@ stages {
                 steps {
                     script {
                         sh '''
-                        docker run -d -p 8000:8000 --name $DOCKER_IMAGE_WEB_DEV --network pg_network\
+                        docker run -d -p 8005:8000 --name $DOCKER_IMAGE_WEB_DEV --network pg_network\
                         -e DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik \
                         $DOCKER_ID/$DOCKER_IMAGE_WEB_DEV:$DOCKER_TAG \
                         bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0'
@@ -132,7 +132,7 @@ stages {
                 steps {
                     script {
                         sh '''
-                        docker run -d -p 8001:80 --name $DOCKER_IMAGE_WEB_PROD --network pg_network\
+                        docker run -d -p 8006:80 --name $DOCKER_IMAGE_WEB_PROD --network pg_network\
                         -e DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik \
                         $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG
                         sleep 10
@@ -173,7 +173,7 @@ stages {
                 steps {
                     script {
                         sh '''
-                        curl localhost:8000/health
+                        curl localhost:8005/health
                         '''
                     }
                 }
@@ -182,7 +182,7 @@ stages {
                 steps {
                     script {
                         sh '''
-                        curl localhost:8001/health
+                        curl localhost:8006/health
                         '''
                     }
                 }
