@@ -11,8 +11,8 @@ spec:
       kind: Rule
       services:
       - name: api@internal
-      kind: TraefikService
-    middlewares:
-    - name: dashboard-stripprefix
+        kind: TraefikService
+      middlewares:
+      - name: dashboard-stripprefix
       # middlewares:
       #   - name: traefik-auth-middleware
