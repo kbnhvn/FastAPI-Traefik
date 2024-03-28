@@ -6,7 +6,7 @@ spec:
  scaleTargetRef:
    apiVersion: apps/v1
    kind: Deployment
-   name: web-deployment 
+   name: fastapi-traefik 
   minReplicas: {{ .Values.web.hpa.minReplicas }}
   maxReplicas: {{ .Values.web.hpa.maxReplicas }}
   targetCPUUtilizationPercentage: {{ .Values.web.hpa.targetCPUUtilizationPercentage }}
