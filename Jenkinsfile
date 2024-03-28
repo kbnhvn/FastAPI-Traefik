@@ -105,7 +105,7 @@ stages {
                 steps {
                     script {
                         sh '''
-                        docker run -d --name $DOCKER_IMAGE_DATA --network es_network\
+                        docker run -d --name $DOCKER_IMAGE_DATA --network es_network \
                         -e DATABASE_URL=http://elasticsearch:9200 \
                         -e INDEX_NAME=qualite_air \
                         -e EXTERNAL_API_URL=$EXTERNAL_API_URL \
@@ -119,7 +119,7 @@ stages {
                 steps {
                     script {
                         sh '''
-                        docker run -d -p 8005:8000 --name $DOCKER_IMAGE_WEB_DEV --network pg_network\
+                        docker run -d -p 8005:8000 --name $DOCKER_IMAGE_WEB_DEV --network pg_network \
                         -e DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik \
                         $DOCKER_ID/$DOCKER_IMAGE_WEB_DEV:$DOCKER_TAG \
                         bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0'
