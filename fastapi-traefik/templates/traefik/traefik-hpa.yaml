@@ -1,0 +1,13 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+ name: traefik-hpa
+spec:
+ scaleTargetRef:
+   apiVersion: apps/v1
+   kind: Deployment
+   name: traefik-deployment 
+  minReplicas: {{ .Values.hpatraefik.minReplicas }}
+  maxReplicas: {{ .Values.hpatraefik.maxReplicas }}
+  targetCPUUtilizationPercentage: {{ .Values.hpatraefik.targetCPUUtilizationPercentage }}
+
