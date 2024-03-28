@@ -7,7 +7,7 @@ spec:
     - web
     - websecure
   routes:
-    - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/admin/dashboard/`)
+    - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/admin/dashboard`)
       kind: Rule
       services:
       - name: api@internal
