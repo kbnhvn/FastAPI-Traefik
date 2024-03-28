@@ -24,6 +24,10 @@ web:
     targetPort: 8000
   config:
     script_name: /api/admin
+  hpa:
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
 
 db:
   replicaCount: 1
@@ -189,13 +193,3 @@ secrets:
   db:
     user: ""
     password: ""
-
-hpatraefik:
-  minReplicas: 1
-  maxReplicas: 5
-  targetCPUUtilizationPercentage: 70
-
-hpaweb:
-  minReplicas: 1
-  maxReplicas: 3
-  targetCPUUtilizationPercentage: 70
