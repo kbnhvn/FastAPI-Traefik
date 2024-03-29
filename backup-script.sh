@@ -10,4 +10,4 @@ mkdir -p "$BACKUP_DIR"
 sudo k3s etcd-snapshot save --etcd-snapshot-dir="$BACKUP_DIR"
 
 # Copie du backup dans le bucket S3
-aws s3 cp "$BACKUP_DIR" s3://ec2-fastapi-traefik-backup
+sudo aws s3 cp "$BACKUP_DIR"/* s3://ec2-fastapi-traefik-backup/backup-"$DATE"
