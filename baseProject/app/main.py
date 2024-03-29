@@ -102,6 +102,12 @@ async def login(response: Response, form_data: OAuth2PasswordRequestForm = Depen
     else:
         raise HTTPException(status_code=404, detail="User not found or password is incorrect")
 
+@app.post("/logout", name='User Logout', tags=['Users', 'Logout'])
+async def logout(response: Response):
+    # Suppression du cookie contenant le token JWT
+    response.delete_cookie(key="auth_token")
+    return {"message": "Logout successful"}
+
 # --------- Utilities --------- #
 
 @app.on_event("startup")

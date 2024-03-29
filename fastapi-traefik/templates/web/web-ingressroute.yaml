@@ -28,6 +28,13 @@ spec:
       port: {{ .Values.web.service.port }}
     middlewares:
       - name: https-redirect
+  - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/logout`)
+    kind: Rule
+    services:
+    - name: web-service
+      port: {{ .Values.web.service.port }}
+    middlewares:
+      - name: https-redirect
   - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/forward-auth`)
     kind: Rule
     services:
