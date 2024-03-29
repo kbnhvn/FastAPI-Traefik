@@ -50,7 +50,7 @@ pgadmin:
     type: ClusterIP
     port: 8080
   config:
-    script_name: /api/admin
+    script_name: /admin/pgadmin
   credentials:
     secret_file: pgadmin-secret
 
@@ -62,7 +62,7 @@ kibana:
     type: ClusterIP
     port: 5601
   config:
-    server_basepath: /api/kibana
+    server_basepath: /kibana
   hpa:
     minReplicas: 1
     maxReplicas: 5
