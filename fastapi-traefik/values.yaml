@@ -5,7 +5,7 @@
 namespace: ""
 
 data:
-  schedule: "15 14 * * *"     # A définir
+  schedule: "0 0 */2 * *"     # Un jour ,sur deux a minuit
   repository: kbnhvn/datafetcher
   tag: latest
   index_name: qualite_air
@@ -24,6 +24,10 @@ web:
     targetPort: 8000
   config:
     script_name: /api/admin
+  hpa:
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
 
 db:
   replicaCount: 1
@@ -46,7 +50,7 @@ pgadmin:
     type: ClusterIP
     port: 8080
   config:
-    script_name: /api/admin
+    script_name: /admin/pgadmin
   credentials:
     secret_file: pgadmin-secret
 
@@ -58,7 +62,11 @@ kibana:
     type: ClusterIP
     port: 5601
   config:
-    server_basepath: /api/kibana
+    server_basepath: /kibana
+  hpa:
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
 
 elasticsearch:
   replicaCount: 1
@@ -72,6 +80,14 @@ elasticsearch:
     node_name: es
     discovery_type: single-node
 
+nginx:
+  replicaCount: 1
+  repository: kbnhvn/webserver
+  tag: v.0.0.1
+  service:
+    type: ClusterIP
+    port: 8000
+
 traefik:
   replicaCount: 1
   image:
@@ -82,10 +98,15 @@ traefik:
   args:
     - "--log.level=DEBUG"
     - "--accesslog=true"
-    - "--api.insecure=true"
-    - "--providers.kubernetesingress=true"
+    # - "--api.insecure=true"
+    - "--api.dashboard=true"
+    - "--providers.kubernetescrd=true"
     - "--entrypoints.web.Address=:80"
     - "--entrypoints.websecure.Address=:443"
+    # Pour HTTPS
+    - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+    - "--certificatesresolvers.letsencrypt.acme.email=joel.lourenco.pro@gmail.com"
+    - "--certificatesresolvers.letsencrypt.acme.storage=/acme.json"
   ports:
     web:
       containerPort: 80
@@ -124,6 +145,23 @@ role:
         - ingresses/status
       verbs:
         - update
+    - apiGroups:
+        - traefik.containo.us
+      resources:
+        - middlewares
+        - ingressroutes
+        - tlsstores
+        - tlsOptions
+        - ingressroutetcps
+        - ingressrouteudps
+        - serverstransports
+        - traefikservices
+        - middlewaretcps
+        - tlsoptions
+      verbs:
+        - get
+        - list
+        - watch
 
 serviceAccount:
   name: traefik-service-account
@@ -152,3 +190,13 @@ webSecureService:
 ingress:
   host: fastapi-traefik.cours-datascientest-devops.cloudns.be
 
+# Les secrets sont stockés dans les credentials Jenkins et sont envoyés via le pipeline
+secrets:
+  web:
+    secret_key: ""
+  pgadmin:
+    email: ""
+    password: ""
+  db:
+    user: ""
+    password: ""

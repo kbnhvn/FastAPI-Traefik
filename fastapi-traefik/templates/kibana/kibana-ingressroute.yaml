@@ -1,0 +1,19 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kibana-ingressroute
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+  - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`{{ .Values.kibana.config.server_basepath }}`)
+    kind: Rule
+    services:
+    - name: kibana-service
+      port: {{ .Values.kibana.service.port }}
+    middlewares:
+      - name: traefik-auth-middleware
+      - name: https-redirect
+  tls:
+    certResolver: letsencrypt

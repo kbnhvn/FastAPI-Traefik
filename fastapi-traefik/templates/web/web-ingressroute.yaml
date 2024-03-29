@@ -1,0 +1,68 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: app-ingressroute-web
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+  - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/docs`)
+    kind: Rule
+    services:
+    - name: web-service
+      port: {{ .Values.web.service.port }}
+    middlewares:
+      - name: https-redirect
+  - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/openapi.json`)
+    kind: Rule
+    services:
+    - name: web-service
+      port: {{ .Values.web.service.port }}
+    middlewares:
+      - name: https-redirect
+  - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/login`)
+    kind: Rule
+    services:
+    - name: web-service
+      port: {{ .Values.web.service.port }}
+    middlewares:
+      - name: https-redirect
+  - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/logout`)
+    kind: Rule
+    services:
+    - name: web-service
+      port: {{ .Values.web.service.port }}
+    middlewares:
+      - name: https-redirect
+  - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/forward-auth`)
+    kind: Rule
+    services:
+    - name: web-service
+      port: {{ .Values.web.service.port }}
+    middlewares:
+      - name: https-redirect
+  - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/signup`)
+    kind: Rule
+    services:
+    - name: web-service
+      port: {{ .Values.web.service.port }}
+    middlewares:
+      - name: https-redirect
+  - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/users`)
+    kind: Rule
+    services:
+    - name: web-service
+      port: {{ .Values.web.service.port }}
+    middlewares:
+      - name: traefik-auth-middleware
+      - name: https-redirect
+  - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/health`)
+    kind: Rule
+    services:
+    - name: web-service
+      port: {{ .Values.web.service.port }}
+    middlewares:
+      - name: https-redirect
+  tls:
+    certResolver: letsencrypt

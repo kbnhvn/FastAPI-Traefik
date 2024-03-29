@@ -1,0 +1,25 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nginx-ingressroute
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+  - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/`)
+    kind: Rule
+    services:
+    - name: nginx-service
+      port: {{ .Values.nginx.service.port }}
+    middlewares:
+      - name: https-redirect
+  - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`/login.html`)
+    kind: Rule
+    services:
+    - name: nginx-service
+      port: {{ .Values.nginx.service.port }}
+    middlewares:
+      - name: https-redirect
+  tls:
+    certResolver: letsencrypt

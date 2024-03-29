@@ -1,0 +1,82 @@
+/* Correction du style de base pour le corps de la page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column; /* Assure que les éléments s'affichent verticalement */
+    align-items: center; /* Centre les éléments horizontalement */
+}
+
+/* Styles généraux pour le formulaire */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Ajustez selon la largeur souhaitée */
+    margin: auto; /* Centre le formulaire dans son conteneur */
+}
+
+/* Styles pour les inputs du formulaire */
+input[type="email"], input[type="password"] {
+    width: 65%; /* Prend toute la largeur disponible */
+    margin: 5px; /* Espacement entre les champs */
+    padding: 5px; /* Espace interne pour le texte */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Inclut padding et border dans la largeur totale */
+}
+
+/* Styles spécifiques pour le bouton de soumission */
+button {
+    width: auto; /* S'ajuste au contenu ou spécifiez une largeur */
+    padding: 10px 20px; /* Plus grand padding pour un bouton plus grand */
+    font-size: 16px; /* Taille de texte plus grande */
+    background-color: #199dc9; /* Bleu clair */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Animation douce au survol */
+}
+
+button:hover {
+    background-color: #5da4c0; /* Bleu clair plus soutenu au survol */
+}
+
+/* Centre le bouton dans le formulaire */
+button {
+    align-self: center; /* Centre le bouton par rapport au formulaire */
+}
+
+/* Styles pour les sections et ul pour améliorer l'affichage */
+section, ul {
+    width: 100%; /* Assure que ces éléments prennent toute la largeur */
+    max-width: 600px; /* Limite la largeur pour les écrans larges */
+    margin: 10px 0; /* Espacement autour des sections pour la lisibilité */
+}
+
+/* Liste et liens */
+ul {
+    list-style-type: none; /* Enlève les puces de liste */
+    padding: 0; /* Enlève le padding par défaut */
+    width: 100%; /* S'assure que la liste prend toute la largeur */
+    display: flex; /* Utilise Flexbox */
+    flex-direction: column; /* Organise les éléments de liste verticalement */
+    align-items: center; /* Centre les éléments de liste horizontalement */
+}
+
+li {
+    margin: 5px 0; /* Espacement entre les éléments de liste */
+}
+
+a {
+    text-align: center;
+    padding: 10px; /* Ajoute un peu de padding autour des liens pour faciliter le clic */
+}

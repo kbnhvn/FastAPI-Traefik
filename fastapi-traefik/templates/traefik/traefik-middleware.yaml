@@ -1,0 +1,32 @@
+# Pour le forward auth vers l'api web
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-auth-middleware
+spec:
+  forwardAuth:
+    address: http://web-service.{{ .Values.namespace }}.svc.cluster.local:8000/forward-auth
+    trustForwardHeader: true
+    authResponseHeaders:
+      - X-User-Role
+
+---
+# Pour prendre en charge le dashboard
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: dashboard-stripprefix
+spec:
+  stripPrefix:
+    prefixes:
+      - "/admin/dashboard"
+
+---
+# Pour la redirection https
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: https-redirect
+spec:
+  redirectScheme:
+    scheme: https

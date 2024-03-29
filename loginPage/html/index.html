@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Welcome to the Dashboard</h1>
+    <p class="intro"></p>
+    <h3>Public access</h3>
+    <ul>
+        <li><a href="/login.html">Log in</a></li>
+        <li><a href="/docs">FastAPI /docs</a></li>
+    </ul>
+    <h3>User access</h3>
+    <ul>
+        <li><a href="/kibana">Kibana</a></li>
+    </ul>
+    <h3>Admin access</h3>
+    <ul>
+        <li><a href="/dashboard/">Traefik Dashboard</a></li>
+        <li><a href="/admin/pgadmin">pgAdmin</a></li>
+        <li><a href="/users">List users</a></li>
+    </ul>
+    <h3>Log out</h3>
+    <ul>
+        <li><a href="#" onclick="logout(); return false;">Log out</a></li>
+    </ul>
+    <script>
+        // Script de déconnexion
+        async function logout() {
+            const response = await fetch('/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            alert(data.message);
+        }
+    </script>
+</body>
+</html>

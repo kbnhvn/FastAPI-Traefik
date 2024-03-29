@@ -4,10 +4,16 @@ DOCKER_ID = "kbnhvn" // replace this with your docker-id
 DOCKER_IMAGE_DATA = "datafetcher"
 DOCKER_IMAGE_WEB_DEV = "web-dev"
 DOCKER_IMAGE_WEB_PROD = "web-prod"
+DOCKER_IMAGE_WEBSERVER = "webserver"
 EXTERNAL_API_URL = "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/qualite-de-lair-france/records?limit=-1"
 DEV_HOSTNAME = "dev.fastapi-traefik.cloudns.ch"
 PROD_HOSTNAME = "prod.fastapi-traefik.cloudns.ch"
 DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
+
+// SECRETS
+SECRET_KEY = credentials("SECRET_KEY")
+PGADMIN_CREDENTIALS = credentials("PGADMIN_CREDENTIALS")
+DB_CREDENTIALS = credentials("DB_CREDENTIALS")
 }
 agent any // Jenkins will be able to select all available agents
 stages {
@@ -41,6 +47,17 @@ stages {
                         sh '''
                         docker rm -f $DOCKER_IMAGE_WEB_PROD || true
                         docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG -f ./baseProject/Dockerfile.prod ./baseProject
+                        sleep 6
+                        '''
+                    }
+                }
+            }
+            stage(' Build webserver Image') {
+                steps {
+                    script {
+                        sh '''
+                        docker rm -f $DOCKER_IMAGE_WEBSERVER || true
+                        docker build -t $DOCKER_ID/$DOCKER_IMAGE_WEBSERVER:$DOCKER_TAG ./loginPage
                         sleep 6
                         '''
                     }
@@ -88,7 +105,7 @@ stages {
                 steps {
                     script {
                         sh '''
-                        docker run -d --name $DOCKER_IMAGE_DATA --network es_network\
+                        docker run -d --name $DOCKER_IMAGE_DATA --network es_network \
                         -e DATABASE_URL=http://elasticsearch:9200 \
                         -e INDEX_NAME=qualite_air \
                         -e EXTERNAL_API_URL=$EXTERNAL_API_URL \
@@ -102,7 +119,7 @@ stages {
                 steps {
                     script {
                         sh '''
-                        docker run -d -p 8000:8000 --name $DOCKER_IMAGE_WEB_DEV --network pg_network\
+                        docker run -d -p 8005:8000 --name $DOCKER_IMAGE_WEB_DEV --network pg_network \
                         -e DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik \
                         $DOCKER_ID/$DOCKER_IMAGE_WEB_DEV:$DOCKER_TAG \
                         bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0'
@@ -115,9 +132,20 @@ stages {
                 steps {
                     script {
                         sh '''
-                        docker run -d -p 8001:80 --name $DOCKER_IMAGE_WEB_PROD --network pg_network\
+                        docker run -d -p 8006:80 --name $DOCKER_IMAGE_WEB_PROD --network pg_network \
                         -e DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik \
                         $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG
+                        sleep 10
+                        '''
+                    }
+                }
+            }
+            stage(' Run webserver Container') {
+                steps {
+                    script {
+                        sh '''
+                        docker run -d -p 8003:80 --name $DOCKER_IMAGE_WEBSERVER \
+                        $DOCKER_ID/$DOCKER_IMAGE_WEBSERVER:$DOCKER_TAG
                         sleep 10
                         '''
                     }
@@ -145,7 +173,7 @@ stages {
                 steps {
                     script {
                         sh '''
-                        curl localhost:8000
+                        curl localhost:8005/health
                         '''
                     }
                 }
@@ -154,7 +182,16 @@ stages {
                 steps {
                     script {
                         sh '''
-                        curl localhost:8001
+                        curl localhost:8006/health
+                        '''
+                    }
+                }
+            }
+            stage(' Test webserver Container') {
+                steps {
+                    script {
+                        sh '''
+                        curl localhost:8003/
                         '''
                     }
                 }
@@ -195,6 +232,16 @@ stages {
                         sh '''
                         docker login -u $DOCKER_ID -p $DOCKER_PASS
                         docker push $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG
+                        '''
+                    }
+                }
+            }
+            stage(' Push webserver Image') {
+                steps {
+                    script {
+                        sh '''
+                        docker login -u $DOCKER_ID -p $DOCKER_PASS
+                        docker push $DOCKER_ID/$DOCKER_IMAGE_WEBSERVER:$DOCKER_TAG
                         '''
                     }
                 }
@@ -246,6 +293,7 @@ stage('Deploiement en dev'){
                 # Modification des tags
                 yq eval ".web.tag = strenv(DOCKER_TAG)" -i values.yml
                 yq eval ".data.tag = strenv(DOCKER_TAG)" -i values.yml
+                yq eval ".nginx.tag = strenv(DOCKER_TAG)" -i values.yml
 
                 # Modification du repository pour l'image web
                 yq eval ".web.repository = strenv(FULL_REPOSITORY)" -i values.yml
@@ -256,6 +304,13 @@ stage('Deploiement en dev'){
                 # Modification du ClusterRole name
                 yq eval ".role.name = strenv(ROLE_NAME)" -i values.yml
                 yq eval ".roleBinding.name = strenv(ROLE_BINDING_NAME)" -i values.yml
+
+                #Ajout des secrets
+                yq eval ".secrets.web.secret_key = strenv(SECRET_KEY)" -i values.yml
+                yq eval ".secrets.pgadmin.email = strenv(PGADMIN_CREDENTIALS_USR)" -i values.yml
+                yq eval ".secrets.pgadmin.password = strenv(PGADMIN_CREDENTIALS_PSW)" -i values.yml
+                yq eval ".secrets.db.user = strenv(DB_CREDENTIALS_USR)" -i values.yml
+                yq eval ".secrets.db.password = strenv(DB_CREDENTIALS_PSW)" -i values.yml
 
                 helm upgrade --install app fastapi-traefik --values=values.yml --namespace $NAMESPACE
                 '''
@@ -301,6 +356,7 @@ stage('Deploiement en prod'){
                 # Modification des tags
                 yq eval ".web.tag = strenv(DOCKER_TAG)" -i values.yml
                 yq eval ".data.tag = strenv(DOCKER_TAG)" -i values.yml
+                yq eval ".nginx.tag = strenv(DOCKER_TAG)" -i values.yml
 
                 # Modification du repository pour l'image web
                 yq eval ".web.repository = strenv(FULL_REPOSITORY)" -i values.yml
@@ -311,6 +367,13 @@ stage('Deploiement en prod'){
                 # Modification du ClusterRole name
                 yq eval ".role.name = strenv(ROLE_NAME)" -i values.yml
                 yq eval ".roleBinding.name = strenv(ROLE_BINDING_NAME)" -i values.yml
+
+                #Ajout des secrets
+                yq eval ".secrets.web.secret_key = strenv(SECRET_KEY)" -i values.yml
+                yq eval ".secrets.pgadmin.email = strenv(PGADMIN_CREDENTIALS_USR)" -i values.yml
+                yq eval ".secrets.pgadmin.password = strenv(PGADMIN_CREDENTIALS_PSW)" -i values.yml
+                yq eval ".secrets.db.user = strenv(DB_CREDENTIALS_USR)" -i values.yml
+                yq eval ".secrets.db.password = strenv(DB_CREDENTIALS_PSW)" -i values.yml
 
                 # ------ Modifications relatives aux ENV de l'image PROD uniquement ----
                 sed -i "/command/d" values.yml

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Login</h2>
+    <form id="loginForm">
+        Email: <input type="email" id="email" required><br>
+        Password: <input type="password" id="password" required><br>
+        <button type="submit">Login</button>
+    </form>
+    
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Prépare les données sous forme de données de formulaire encodées en URL
+            const formData = new URLSearchParams();
+            formData.append('username', email);
+            formData.append('password', password);
+
+            // Fetch permet le passage de header
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
+            });
+
+            if (response.ok) {
+                // Le cookie HTTPOnly avec le token JWT est configuré côté serveur
+                // Redirection vers la page d'accueil
+                window.location.href = '/index.html'; 
+            } else {
+                alert('Login failed');
+            }
+        });
+    </script>
+</body>
+</html>

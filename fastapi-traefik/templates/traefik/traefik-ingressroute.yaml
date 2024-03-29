@@ -1,0 +1,21 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-ingressroute
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - match: Host(`{{ .Values.ingress.host }}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      kind: Rule
+      services:
+      - name: api@internal
+        kind: TraefikService
+      middlewares:
+      # - name: dashboard-stripprefix
+      - name: traefik-auth-middleware
+      - name: https-redirect
+      
+  tls:
+    certResolver: letsencrypt

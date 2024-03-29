@@ -28,3 +28,11 @@ spec:
               containerPort: {{ .Values.traefik.ports.websecure.containerPort }}
             - name: dashboard
               containerPort: {{ .Values.traefik.ports.dashboard.containerPort }}
+      # Pour HTTPS
+      volumes:
+        - name: acme-storage
+          emptyDir: {}
+      volumeMounts:
+        - name: acme-storage
+          mountPath: "/acme.json"
+          readOnly: false
