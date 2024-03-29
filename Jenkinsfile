@@ -326,6 +326,7 @@ stage('Deploiement en prod'){
         NAMESPACE = "prod"
         ROLE_NAME = "traefik-role-prod"
         ROLE_BINDING_NAME = "traefik-role-binding-prod"
+        WEB_PORT = "80"
         }
         when 
         {
@@ -378,9 +379,9 @@ stage('Deploiement en prod'){
                 # ------ Modifications relatives aux ENV de l'image PROD uniquement ----
                 sed -i "/command/d" values.yml
                 sed -i "/arg/d" values.yml
-                yq eval ".web.service.port = 80" -i values.yml
-                yq eval ".web.service.targetPort = 80" -i values.yml
-                yq eval ".web.containerPort = 80" -i values.yml
+                yq eval ".web.service.port = strenv(WEB_PORT)" -i values.yml
+                yq eval ".web.service.targetPort = strenv(WEB_PORT)" -i values.yml
+                yq eval ".web.containerPort = strenv(WEB_PORT)" -i values.yml
                 
                 helm upgrade --install app fastapi-traefik --values=values.yml --namespace $NAMESPACE
                 '''
