@@ -19,10 +19,10 @@ DATABASE_URL=postgresql://```user```:```password```@```host```:5432/```db```
 Le cluster k3s et jenkins tournent sur un EC2 AWS.
 
 Pour accéder à l'environnement **dev** (basé sur la branche ```develop```) :
-- http://dev.fastapi-traefik.cloudns.ch
+- https://dev.fastapi-traefik.cloudns.ch
   
 Pour accéder à l'environnement **prod** (basé sur la branche ```master```) :
-- http://prod.fastapi-traefik.cloudns.ch
+- https://prod.fastapi-traefik.cloudns.ch
   
 Pour accéder à **jenkins** :
 - http://15.237.207.19:9090
