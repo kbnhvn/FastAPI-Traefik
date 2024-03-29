@@ -377,8 +377,8 @@ stage('Deploiement en prod'){
                 yq eval ".secrets.db.password = strenv(DB_CREDENTIALS_PSW)" -i values.yml
 
                 # ------ Modifications relatives aux ENV de l'image PROD uniquement ----
-                sed -i "/command/d" values.yml
-                sed -i "/arg/d" values.yml
+                yq eval 'del(.web.command)' -i values.yml
+                yq eval 'del(.web.args)' -i values.yml
                 yq eval ".web.service.port = strenv(WEB_PORT)" -i values.yml
                 yq eval ".web.service.targetPort = strenv(WEB_PORT)" -i values.yml
                 yq eval ".web.containerPort = strenv(WEB_PORT)" -i values.yml
