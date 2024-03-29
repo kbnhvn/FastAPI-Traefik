@@ -98,7 +98,7 @@ traefik:
   args:
     - "--log.level=DEBUG"
     - "--accesslog=true"
-    - "--api.insecure=true"
+    # - "--api.insecure=true"
     - "--api.dashboard=true"
     - "--providers.kubernetescrd=true"
     - "--entrypoints.web.Address=:80"
