@@ -1,19 +1,34 @@
 # FastAPI-Traefik
 
+## Présentation
+La qualité de l'air est une préoccupation croissante pour la santé publique. Disposer d'un outil permettant de visualiser les données de qualité de l'air par région, ville ou polluant offre une valeur ajoutée significative pour le grand public et les décideurs. 
+
+Cette application a été créée dans le cadre du *projet Fil Rouge* de la formation *Bootcamp Ingénieur DevOps* de DATASCIENTEST. Elle se base sur le sujet FastAPI Traefik. Elle est conçue pour fournir une solution intégrée et facile d'accès pour le suivi et la visualisation des données de qualité de l'air.
+
+L'architecture de l'application repose sur une série de micro-services, chacun jouant un rôle spécifique dans le traitement, la gestion et la visualisation des données. Ces services comprennent :
+
+- Traefik comme edge router, simplifiant le routage des requêtes HTTP et HTTPS vers les services internes.
+- Une API *web* pour l'ajout de nouveaux utilisateurs et l'authentification.
+- Une base de données Postgres pour stocker les informations des utilisateurs, avec un service pgAdmin pour la gestion de cette base.
+- Le service data-air, qui récupère les données de pollution de l'air depuis une API externe pour les indexer dans une base de données Elasticsearch.
+- Kibana offre une interface utilisateur pour la visualisation.
+- Un serveur web Nginx pour la landing page et la page de connexion, améliorant l'accès utilisateur.
+
+Pour maximiser la disponibilité, la performance et la scalabilité de l'application, elle est déployée sur un cluster K3s. K3s offre un environnement Kubernetes léger et facile à déployer, idéal pour des applications conteneurisées comme celle-ci. Ce choix de déploiement assure une gestion efficace des ressources et une haute disponibilité des services.
+
 ## Cahier des charges :
 https://1drv.ms/w/s!ArK3W0SU4bw29gz5Em1yGjNG07H8?e=N2dZ83
 
 ## Images Docker
-
-### Images créées à partir du projet initial :
+### Images docker créées à partir du projet initial :
 - kbnhvn/web-dev : https://hub.docker.com/r/kbnhvn/web-dev
 - kbnhvn/web-prod : https://hub.docker.com/r/kbnhvn/web-prod
 
-### Image créée pour récupérer les données :
+### Image docker du service de récupération des données :
 - kbnhvn/datafetcher : https://hub.docker.com/r/kbnhvn/datafetcher
 
-Env :
-DATABASE_URL=postgresql://```user```:```password```@```host```:5432/```db```
+### Image docker du serveur web :
+- kbnhvn/webserver : https://hub.docker.com/r/kbnhvn/webserver
 
 ## Serveur :
 Le cluster k3s et jenkins tournent sur un EC2 AWS.
@@ -26,7 +41,10 @@ Pour accéder à l'environnement **prod** (basé sur la branche ```master```) :
   
 Pour accéder à **jenkins** :
 - http://15.237.207.19:9090
-  
+
+## Instructions d'installation :
+Afin d'installer ce projet en local, il vous faudra cloner ce repository :
+- ```https://github.com/kbnhvn/FastAPI-Traefik.git .```
 
 ## Notes et instructions de dev :
 
