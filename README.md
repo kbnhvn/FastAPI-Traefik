@@ -43,11 +43,20 @@ Pour accéder à **jenkins** :
 - http://15.237.207.19:9090
 
 ## Instructions d'installation :
-Afin d'installer ce projet en local, il vous faudra cloner ce repository :
-- ```https://github.com/kbnhvn/FastAPI-Traefik.git .```
+### Afin d'installer ce projet en local :
+- Cloner ce repository : ```https://github.com/kbnhvn/FastAPI-Traefik.git .```
+- Installer **K3S** qui est une version légère de Kubernetes ansi que **Helm**
+- Modifier le fichier ```custom_secrets.yaml``` par les valeurs de votre choix
+- Lancer la commande : ``` ``` pour installer l'environement **dev** du projet
+- Lancer la commande : ``` ``` pour installer l'environement **prod** du projet
+
+### Méthode automatique :
+- Cloner ce repository : ```https://github.com/kbnhvn/FastAPI-Traefik.git .```
+- Modifier le fichier ```custom_secrets.yaml``` par les valeurs de votre choix
+- Exécuter la commande : ```sudo chmod +x ./install_and_deploy.sh```
+- Lancer le script : ```install_and_deploy.sh```
 
 ## Notes et instructions de dev :
-
 ### Pour commencer :
 - Créer un dossier projet
 - Cloner le repo dans ce dossier :
