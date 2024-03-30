@@ -1,0 +1,10 @@
+# Secret values, like login/password or secret_key
+secrets:
+  web:
+    secret_key: ""
+  pgadmin:
+    email: ""
+    password: ""
+  db:
+    user: ""
+    password: ""

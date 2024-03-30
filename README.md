@@ -46,15 +46,19 @@ Pour accéder à **jenkins** :
 ### Afin d'installer ce projet en local :
 - Cloner ce repository : ```https://github.com/kbnhvn/FastAPI-Traefik.git .```
 - Installer **K3S** qui est une version légère de Kubernetes ansi que **Helm**
-- Modifier le fichier ```custom_secrets.yaml``` par les valeurs de votre choix
-- Lancer la commande : ``` ``` pour installer l'environement **dev** du projet
-- Lancer la commande : ``` ``` pour installer l'environement **prod** du projet
+- Modifier le fichier ```custom_values.yaml``` par les valeurs de votre choix
+- Créer les namespaces pour les environnements **dev** et **prod** : ```kubectl create namespace dev```, ```kubectl create namespace prod```
+- Lancer la commande : ```helm upgrade --install app fastapi-traefik --values=./fastapi-traefik/values.yml -f ./fastapi-traefik/values-dev.yaml -f ./custom_values.yaml --namespace dev``` pour installer l'environement **dev** du projet
+- Lancer la commande : ```helm upgrade --install app fastapi-traefik --values=./fastapi-traefik/values.yml -f ./fastapi-traefik/values-prod.yaml -f ./custom_values.yaml --namespace prod``` pour installer l'environement **prod** du projet
 
 ### Méthode automatique :
 - Cloner ce repository : ```https://github.com/kbnhvn/FastAPI-Traefik.git .```
-- Modifier le fichier ```custom_secrets.yaml``` par les valeurs de votre choix
+- Modifier le fichier ```custom_values.yaml``` par les valeurs de votre choix
 - Exécuter la commande : ```sudo chmod +x ./install_and_deploy.sh```
 - Lancer le script : ```install_and_deploy.sh```
+
+### Test du projet en local :
+Suite à l'installation, l'environnement **dev** sera visible sur ```https://dev.localhost/``` et **prod** sera visible sur ```https://prod.localhost/```.
 
 ## Notes et instructions de dev :
 ### Pour commencer :
