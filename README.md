@@ -44,16 +44,16 @@ Pour accéder à **jenkins** :
 
 ## Instructions d'installation :
 ### Afin d'installer ce projet en local :
-- Cloner ce repository : ```https://github.com/kbnhvn/FastAPI-Traefik.git .```
+- Télécharger la dernière version de ce projet [ICI](https://github.com/kbnhvn/FastAPI-Traefik/releases)
 - Installer **K3S** qui est une version légère de Kubernetes ansi que **Helm**
-- Modifier le fichier ```custom_values.yaml``` par les valeurs de votre choix
+- Modifier le fichier ```custom_values.yaml``` par les valeurs de votre choix. **Attention**, ces valeurs doivent être encodées en base64 (vous pouvez utiliser [ce site](https://www.base64decode.org/))
 - Créer les namespaces pour les environnements **dev** et **prod** : ```kubectl create namespace dev```, ```kubectl create namespace prod```
 - Lancer la commande : ```helm upgrade --install app fastapi-traefik --values=./fastapi-traefik/values.yml -f ./fastapi-traefik/values-dev.yaml -f ./custom_values.yaml --namespace dev``` pour installer l'environement **dev** du projet
 - Lancer la commande : ```helm upgrade --install app fastapi-traefik --values=./fastapi-traefik/values.yml -f ./fastapi-traefik/values-prod.yaml -f ./custom_values.yaml --namespace prod``` pour installer l'environement **prod** du projet
 
 ### Méthode automatique :
-- Cloner ce repository : ```https://github.com/kbnhvn/FastAPI-Traefik.git .```
-- Modifier le fichier ```custom_values.yaml``` par les valeurs de votre choix
+- Télécharger la dernière version de ce projet [ICI](https://github.com/kbnhvn/FastAPI-Traefik/releases)
+- Modifier le fichier ```custom_values.yaml``` par les valeurs de votre choix. **Attention**, ces valeurs doivent être encodées en base64 (vous pouvez utiliser [ce site](https://www.base64decode.org/))
 - Exécuter la commande : ```sudo chmod +x ./install_and_deploy.sh```
 - Lancer le script : ```install_and_deploy.sh```
 
