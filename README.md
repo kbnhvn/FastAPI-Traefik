@@ -58,7 +58,7 @@ Pour accéder à **jenkins** :
 - Lancer le script : ```install_and_deploy.sh```
 
 ### Test du projet en local :
-Suite à l'installation, l'environnement **dev** sera visible sur ```https://dev.localhost/``` et **prod** sera visible sur ```https://prod.localhost/```.
+Suite à l'installation, l'environnement **dev** sera visible sur [https://dev.localhost/](https://dev.localhost/) et **prod** sera visible sur [https://prod.localhost/](https://prod.localhost/).
 
 ## Notes et instructions de dev :
 ### Pour commencer :
