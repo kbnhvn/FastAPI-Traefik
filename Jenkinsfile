@@ -251,6 +251,9 @@ stages {
                         sh '''
                         docker login -u $DOCKER_ID -p $DOCKER_PASS
                         docker push $DOCKER_ID/$DOCKER_IMAGE_WEBSERVER:$DOCKER_TAG
+                        # Création du tag latest pour installation locale
+                        docker tag $DOCKER_ID/$DOCKER_IMAGE_WEBSERVER:$DOCKER_TAG $DOCKER_ID/$DOCKER_IMAGE_WEBSERVER:latest
+                        docker push $DOCKER_ID/$DOCKER_IMAGE_WEBSERVER:latest
                         '''
                     }
                 }
