@@ -211,6 +211,8 @@ stages {
                     script {
                         sh '''
                         docker login -u $DOCKER_ID -p $DOCKER_PASS
+                        // Création du tag latest pour installation locale
+                        docker tag $DOCKER_ID/$DOCKER_IMAGE_DATA:$DOCKER_TAG $DOCKER_ID/$DOCKER_IMAGE_DATA:latest
                         docker push $DOCKER_ID/$DOCKER_IMAGE_DATA:$DOCKER_TAG
                         '''
                     }
@@ -221,6 +223,8 @@ stages {
                     script {
                         sh '''
                         docker login -u $DOCKER_ID -p $DOCKER_PASS
+                        // Création du tag latest pour installation locale
+                        docker tag $DOCKER_ID/$DOCKER_IMAGE_WEB_DEV:$DOCKER_TAG $DOCKER_ID/$DOCKER_IMAGE_WEB_DEV:latest
                         docker push $DOCKER_ID/$DOCKER_IMAGE_WEB_DEV:$DOCKER_TAG
                         '''
                     }
@@ -231,6 +235,8 @@ stages {
                     script {
                         sh '''
                         docker login -u $DOCKER_ID -p $DOCKER_PASS
+                        // Création du tag latest pour installation locale
+                        docker tag $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:latest
                         docker push $DOCKER_ID/$DOCKER_IMAGE_WEB_PROD:$DOCKER_TAG
                         '''
                     }
