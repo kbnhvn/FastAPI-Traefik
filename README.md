@@ -3,7 +3,7 @@
 ## Présentation
 La qualité de l'air est une préoccupation croissante pour la santé publique. Disposer d'un outil permettant de visualiser les données de qualité de l'air par région, ville ou polluant offre une valeur ajoutée significative pour le grand public et les décideurs. 
 
-Cette application a été créée dans le cadre du *projet Fil Rouge* de la formation *Bootcamp Ingénieur DevOps* de DATASCIENTEST. Elle se base sur le sujet FastAPI Traefik. Elle est conçue pour fournir une solution intégrée et facile d'accès pour le suivi et la visualisation des données de qualité de l'air.
+Cette application a été créée dans le cadre du **projet Fil Rouge** de la formation **Bootcamp Ingénieur DevOps** de **DATASCIENTEST**. Elle se base sur le sujet FastAPI Traefik. Elle est conçue pour fournir une solution intégrée et facile d'accès pour le suivi et la visualisation des données de qualité de l'air.
 
 L'architecture de l'application repose sur une série de micro-services, chacun jouant un rôle spécifique dans le traitement, la gestion et la visualisation des données. Ces services comprennent :
 
@@ -11,7 +11,7 @@ L'architecture de l'application repose sur une série de micro-services, chacun 
 - Une API *web* pour l'ajout de nouveaux utilisateurs et l'authentification.
 - Une base de données Postgres pour stocker les informations des utilisateurs, avec un service pgAdmin pour la gestion de cette base.
 - Le service data-air, qui récupère les données de pollution de l'air depuis une API externe pour les indexer dans une base de données Elasticsearch.
-- Kibana offre une interface utilisateur pour la visualisation.
+- Kibana offre une interface utilisateur pour la visualisation de ces données.
 - Un serveur web Nginx pour la landing page et la page de connexion, améliorant l'accès utilisateur.
 
 Pour maximiser la disponibilité, la performance et la scalabilité de l'application, elle est déployée sur un cluster K3s. K3s offre un environnement Kubernetes léger et facile à déployer, idéal pour des applications conteneurisées comme celle-ci. Ce choix de déploiement assure une gestion efficace des ressources et une haute disponibilité des services.
