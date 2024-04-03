@@ -51,10 +51,6 @@ app = FastAPI(
     },
 )
 
-import logging
-# Configuration du logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 # --------- Routes GET --------- #
 
 @app.get("/users", name='Get all users', tags=['Users'])
@@ -71,14 +67,19 @@ async def getAllUsers(payload: dict = Depends(get_user_authenticated)):
 # ROUTE FORWARD AUTH POUR TRAEFIK (vérification du token JWT et role)
 @app.get("/forward-auth", name='Forward Auth', tags=['OAuth'])
 async def forward_auth_route(request: Request, payload: dict = Depends(get_user_authenticated)):
+
+    # Si l'utilisateur est authentifié, continuez
+    return Response(status_code=200)
+
+@app.get("/forward-auth-admin", name='Forward Auth Admin', tags=['OAuth'])
+async def forward_auth_route(request: Request, payload: dict = Depends(get_user_authenticated)):
     # Le payload contient les informations du token décodé
     role = payload.get("role", "")
 
-    logger.info(f"Requête reçue pour l'URL: {request.url}")
-    if ("/admin" in request.url.path or "/dashboard" in request.url.path) and role != "admin":
+    if role != "admin":
         return Response(status_code=403, content="Access denied")
 
-    # Si l'utilisateur est authentifié et autorisé, continuez
+    # Si rôle admin, continuez
     return Response(status_code=200)
 
 # --------- Routes POST --------- #

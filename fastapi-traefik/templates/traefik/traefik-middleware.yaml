@@ -11,6 +11,19 @@ spec:
       - X-User-Role
 
 ---
+# Pour le forward auth vers l'api web et role admin 
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-auth-admin-middleware
+spec:
+  forwardAuth:
+    address: http://web-service.{{ .Values.namespace }}.svc.cluster.local:8000/forward-auth-admin
+    trustForwardHeader: true
+    authResponseHeaders:
+      - X-User-Role
+
+---
 # Pour prendre en charge le dashboard
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
