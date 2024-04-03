@@ -13,7 +13,7 @@ spec:
     - name: pgadmin-service
       port: {{ .Values.pgadmin.service.port }}
     middlewares:
-      - name: traefik-auth-middleware
+      - name: traefik-auth-admin-middleware
       - name: https-redirect
   tls:
     certResolver: letsencrypt

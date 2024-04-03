@@ -67,14 +67,19 @@ async def getAllUsers(payload: dict = Depends(get_user_authenticated)):
 # ROUTE FORWARD AUTH POUR TRAEFIK (vérification du token JWT et role)
 @app.get("/forward-auth", name='Forward Auth', tags=['OAuth'])
 async def forward_auth_route(request: Request, payload: dict = Depends(get_user_authenticated)):
+
+    # Si l'utilisateur est authentifié, continuez
+    return Response(status_code=200)
+
+@app.get("/forward-auth-admin", name='Forward Auth Admin', tags=['OAuth'])
+async def forward_auth_route(request: Request, payload: dict = Depends(get_user_authenticated)):
     # Le payload contient les informations du token décodé
     role = payload.get("role", "")
-    if request.url.path.startswith('/admin/pgadmin') and role != "admin":
-        return Response(status_code=403, content="Access denied")
-    if request.url.path.startswith('/dashboard') and role != "admin":
+
+    if role != "admin":
         return Response(status_code=403, content="Access denied")
 
-    # Si l'utilisateur est authentifié et autorisé, continuez
+    # Si rôle admin, continuez
     return Response(status_code=200)
 
 # --------- Routes POST --------- #
