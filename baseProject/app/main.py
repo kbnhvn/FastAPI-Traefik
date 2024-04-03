@@ -51,6 +51,10 @@ app = FastAPI(
     },
 )
 
+import logging
+# Configuration du logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 # --------- Routes GET --------- #
 
 @app.get("/users", name='Get all users', tags=['Users'])
@@ -69,6 +73,8 @@ async def getAllUsers(payload: dict = Depends(get_user_authenticated)):
 async def forward_auth_route(request: Request, payload: dict = Depends(get_user_authenticated)):
     # Le payload contient les informations du token décodé
     role = payload.get("role", "")
+
+    logger.info(f"Requête reçue pour l'URL: {request.url}")
     if ("/admin" in request.url.path or "/dashboard" in request.url.path) and role != "admin":
         return Response(status_code=403, content="Access denied")
 
