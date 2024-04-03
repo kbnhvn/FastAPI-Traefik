@@ -69,7 +69,9 @@ async def getAllUsers(payload: dict = Depends(get_user_authenticated)):
 async def forward_auth_route(request: Request, payload: dict = Depends(get_user_authenticated)):
     # Le payload contient les informations du token décodé
     role = payload.get("role", "")
-    if "/admin" in request.url.path and role != "admin":
+    if request.url.path.startswith('/admin/pgadmin') and role != "admin":
+        return Response(status_code=403, content="Access denied")
+    if request.url.path.startswith('/dashboard') and role != "admin":
         return Response(status_code=403, content="Access denied")
 
     # Si l'utilisateur est authentifié et autorisé, continuez
